@@ -209,10 +209,13 @@ class SimplexSolver:
     @staticmethod
     def _pivot_col(T):
         """Encontra a coluna com o custo reduzido mais negativo."""
-        negative_costs = T[0, :-1] < -1e-8
-        if not np.any(negative_costs):
+        costs = T[0, :-1]
+        negative_idx = np.where(costs < -1e-8)[0]
+        if negative_idx.size == 0:
             return -1
-        return int(np.where(negative_costs)[0][0])
+        # Escolhe o menor custo reduzido dentre os negativos
+        min_idx = negative_idx[np.argmin(costs[negative_idx])]
+        return int(min_idx)
 
     @staticmethod
     def _pivot_row(T, pc):
