@@ -75,7 +75,7 @@ def show_tableau(T, caption="", pivot: tuple[int, int] | None = None, basis_vars
         st.markdown(f"**{caption}**")
     
     # Exibir o tableau
-    st.dataframe(styler, use_container_width=True)
+    st.dataframe(styler, width='stretch')
     
     # Adicionar legenda explicativa se houver pivot
     if pivot and pivot != (-1, -1):

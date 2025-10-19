@@ -37,6 +37,6 @@ def feasible_region_2d(c: List[float], A: List[List[float]], b: List[float]):
                 name=f"{a[0]:.1f}x₁ + {a[1]:.1f}x₂ = {rhs}",
             )
         )
-    fig.update_layout(xaxis_title="x₁", yaxis_title="x₂", width=800, height=600)
+    # CORREÇÃO: Removidos width e height para permitir que o Streamlit controle o tamanho.
+    fig.update_layout(xaxis_title="x₁", yaxis_title="x₂")
     return fig
-
