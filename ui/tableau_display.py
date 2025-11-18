@@ -42,18 +42,18 @@ def show_tableau(T, caption="", pivot: tuple[int, int] | None = None, basis_vars
             """Aplica destaque ao elemento pivot, linha e coluna."""
             style_df = pd.DataFrame('', index=data.index, columns=data.columns)
             
-            # Destacar elemento pivot em amarelo forte
-            style_df.iloc[pr, pc] = 'background-color: #ffeb3b; font-weight: bold; border: 2px solid #f57f17;'
+            # Destacar elemento pivot em amarelo forte (texto preto para contraste)
+            style_df.iloc[pr, pc] = 'background-color: #ffeb3b; color: black; font-weight: bold; border: 2px solid #f57f17;'
             
             # Destacar linha pivot em amarelo claro
             for col in range(cols):
                 if col != pc:
-                    style_df.iloc[pr, col] = 'background-color: #fff9c4;'
+                    style_df.iloc[pr, col] = 'background-color: #fff9c4; color: black;'
             
             # Destacar coluna pivot em amarelo claro
             for row in range(rows):
                 if row != pr:
-                    style_df.iloc[row, pc] = 'background-color: #fff9c4;'
+                    style_df.iloc[row, pc] = 'background-color: #fff9c4; color: black;'
             
             return style_df
         
@@ -64,7 +64,7 @@ def show_tableau(T, caption="", pivot: tuple[int, int] | None = None, basis_vars
         style_df = pd.DataFrame('', index=data.index, columns=data.columns)
         for col in range(cols):
             if pivot is None or pivot == (-1, -1) or (0, col) != pivot:
-                style_df.iloc[0, col] = 'background-color: #e3f2fd; font-weight: bold;'
+                style_df.iloc[0, col] = 'background-color: #e3f2fd; color: black; font-weight: bold;'
         return style_df
     
     if pivot is None or pivot == (-1, -1):
