@@ -156,8 +156,8 @@ def _render_branch_bound_tree(solver):
         edges_data = []
 
         status_map = {
-            "OPTIMAL": {"label": "Solução Ótima", "color": "#4caf50", "icon": "verified"},
-            "INTEGER": {"label": "Solução Inteira", "color": "#66bb6a", "icon": "check_circle"},
+            "OPTIMAL": {"label": "Solução Ótima", "color": "#2e7d32", "icon": "verified"},
+            "INTEGER": {"label": "Solução Inteira", "color": "#8e24aa", "icon": "check_circle"},
             "INFEASIBLE": {"label": "Infactível", "color": "#f44336", "icon": "lock"},
             "PRUNED": {"label": "Podado por Limite", "color": "#9e9e9e", "icon": "cancel"},
             "FRACTIONAL": {"label": "Relaxação", "color": "#2196f3", "icon": "functions"},
@@ -170,10 +170,13 @@ def _render_branch_bound_tree(solver):
             status_key = "ROOT"
             if node_info['id'] == 0:
                  status_key = "ROOT"
+                 # Se a raiz já for inteira e ótima
+                 if node_info.get("integer_feasible") and abs(node_info["value"] - solver.best_value) < 1e-6:
+                     status_key = "OPTIMAL"
             elif not node_info["feasible"]:
                 status_key = "INFEASIBLE"
             elif node_info.get("integer_feasible"):
-                if node_info["value"] == solver.best_value:
+                if abs(node_info["value"] - solver.best_value) < 1e-6:
                     status_key = "OPTIMAL"
                 else:
                     status_key = "INTEGER"
@@ -239,9 +242,10 @@ def _render_branch_bound_tree(solver):
         
         st.markdown("""
         **Legenda:**
-        - 🟢 **Verde (Ótima/Inteira)**: Solução inteira encontrada. O nó verde mais escuro é a solução ótima final.
-        - 🔴 **Vermelho (Infactível)**: O problema neste nó não tem solução (podado por inviabilidade).
-        - ⚪ **Cinza (Podado por Limite)**: O limite superior deste nó é pior que a melhor solução inteira já encontrada.
+        - 🟢 **Verde (Ótima)**: A melhor solução inteira encontrada.
+        - 🟣 **Roxo (Inteira)**: Solução inteira viável, mas não é a ótima (sub-ótima).
+        - 🔴 **Vermelho (Infactível)**: O problema neste nó não tem solução.
+        - ⚪ **Cinza (Podado por Limite)**: O limite superior deste nó é pior que a melhor solução inteira.
         - 🔵 **Azul (Relaxação)**: Nó com solução fracionária que foi ramificado.
         - 🟡 **Amarelo (Raiz)**: O nó inicial do problema.
         """)

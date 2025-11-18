@@ -25,13 +25,20 @@ def simplex_ui():
     with col_counts[1]:
         n_cons = st.number_input("📏 **Número de Restrições**", 1, 5, max(len(sv_A), 1), help="Quantidade de restrições do problema")
 
+    # Ler preferência de maximização salva
+    saved_maximize = saved.get("maximize", True)
+    maximize_idx = 0 if saved_maximize else 1
+
     with col_counts[2]:
 
         maximize = st.selectbox(
             "🎯 Tipo de otimização:",
             ("🔺 Maximizar", "🔻 Minimizar"),
+            index=maximize_idx,
             help="Tipo de otimização em relação ao valor de Z, Maximizar ou Mínimizar"
         )
+        
+    is_max = (maximize == "🔺 Maximizar")
 
     st.markdown("#### 📝 **Coeficientes da Função Objetivo**", help="Defina os coeficientes da função Z que será otimizada")
     
@@ -111,7 +118,7 @@ def simplex_ui():
         try:
             with st.spinner("🔄 Resolvendo problema..."):
                 solver = SimplexSolver()
-                solver.solve(c, A_conv, b_conv, maximize=maximize)
+                solver.solve(c, A_conv, b_conv, maximize=is_max)
                 
                 if solver.unbounded:
                     st.error("⚠️ **Problema Ilimitado** - A função objetivo pode crescer infinitamente")
@@ -132,6 +139,7 @@ def simplex_ui():
                     "b": b,
                     "z": z,
                     "solution": sol,
+                    "maximize": is_max
                 })
 
                 # ----- Mostrar resultado final primeiro -------------------------
@@ -142,7 +150,7 @@ def simplex_ui():
                     solution=sol[:n_vars], 
                     objective_value=z, 
                     basis_info=solver.get_basis_info(),
-                    maximize=maximize
+                    maximize=is_max
                 )
                 
                 # Mostrar resumo da otimização

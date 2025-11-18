@@ -1,6 +1,8 @@
 import streamlit as st
 
 # Importações das interfaces
+from ui.home_page import home_page
+from ui.library_page import library_page
 from ui.history_page import history_page
 from ui.simplex_page import simplex_ui
 from ui.branch_and_bound_page import bab_ui
@@ -12,6 +14,11 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+# Lógica de redirecionamento (deve vir antes dos widgets)
+if "pending_redirect" in st.session_state:
+    st.session_state["navigation"] = st.session_state["pending_redirect"]
+    del st.session_state["pending_redirect"]
 
 # CSS customizado para melhorar a aparência
 st.markdown("""
@@ -30,6 +37,8 @@ st.markdown("""
 
 # Definição das páginas
 PAGES = {
+    "🏠 Home": home_page,
+    "📚 Biblioteca de Problemas": library_page,
     "📐 Método Simplex": simplex_ui,
     "🌳 Branch & Bound": bab_ui,
     "🕑 Histórico": history_page
@@ -51,7 +60,8 @@ choice = st.sidebar.radio(
     "Escolha a seção:",
     list(PAGES.keys()),
     format_func=lambda x: x,
-    help="Selecione o módulo que deseja utilizar"
+    help="Selecione o módulo que deseja utilizar",
+    key="navigation"
 )
 
 # Informações na sidebar
