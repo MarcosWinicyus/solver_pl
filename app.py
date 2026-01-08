@@ -1,13 +1,6 @@
 import streamlit as st
 
-# Importações das interfaces
-from ui.home_page import home_page
-from ui.library_page import library_page
-from ui.history_page import history_page
-from ui.simplex_page import simplex_ui
-from ui.branch_and_bound_page import bab_ui
-
-# Configuração da página
+# Configuração da página deve ser a primeira chamada
 st.set_page_config(
     page_title="Sistema de Otimização Visual",
     page_icon="📊",
@@ -15,12 +8,18 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Lógica de redirecionamento (deve vir antes dos widgets)
-if "pending_redirect" in st.session_state:
-    st.session_state["navigation"] = st.session_state["pending_redirect"]
-    del st.session_state["pending_redirect"]
+# Importações das interfaces
+from ui.home_page import home_page
+from ui.library_page import library_page
+from ui.history_page import history_page
+from ui.simplex_page import simplex_ui
+from ui.branch_and_bound_page import bab_ui
+from ui.sensitivity_page import sensitivity_ui
+from ui.duality_page import duality_ui
 
-# CSS customizado para melhorar a aparência
+from ui.standard_form_page import standard_form_ui
+
+# CSS customizado Global
 st.markdown("""
 <style>
     /* Destacar botões principais */
@@ -33,78 +32,47 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# --- Definição das Páginas (st.Page) ---
 
+# Principal
+p_home = st.Page(home_page, title="Home", icon="🏠")
+p_library = st.Page(library_page, title="Biblioteca de Problemas", icon="📚")
+p_history = st.Page(history_page, title="Histórico", icon="🕑")
 
-# Definição das páginas
-PAGES = {
-    "🏠 Home": home_page,
-    "📚 Biblioteca de Problemas": library_page,
-    "📐 Método Simplex": simplex_ui,
-    "🌳 Branch & Bound": bab_ui,
-    "🕑 Histórico": history_page
+# Solvers
+p_simplex = st.Page(simplex_ui, title="Método Simplex", icon="📐")
+p_bab = st.Page(bab_ui, title="Branch & Bound", icon="🌳")
+
+# Ferramentas
+p_duality = st.Page(duality_ui, title="Dualidade (Primal-Dual)", icon="🔄")
+p_sensitivity = st.Page(sensitivity_ui, title="Análise de Sensibilidade", icon="📊")
+p_std_form = st.Page(standard_form_ui, title="Forma Padrão", icon="📝")
+
+# Navegação Organizada
+pg = st.navigation({
+    "": [p_home, p_library, p_history],
+    "Solvers": [p_simplex, p_bab],
+    "Ferramentas": [p_duality, p_sensitivity, p_std_form],
+}, position="top")
+
+# --- Lógica de Redirecionamento (Compatibilidade) ---
+# Mapeia as strings antigas usadas em library_page.py e duality_page.py para os objetos st.Page
+REDIRECT_MAP = {
+    "📐 Método Simplex": p_simplex,
+    "🌳 Branch & Bound": p_bab,
+    "Simplex": p_simplex,
+    "Branch & Bound": p_bab
 }
 
-# Header principal
-# st.markdown('<div class="main-header">', unsafe_allow_html=True)
-# st.title("📊 Sistema de Otimização Visual")
-# st.markdown("*Plataforma interativa para aprendizado e resolução de problemas de Programação Linear*")
-# st.markdown('</div>', unsafe_allow_html=True)
+if "pending_redirect" in st.session_state:
+    target = st.session_state["pending_redirect"]
+    del st.session_state["pending_redirect"]
+    
+    if target in REDIRECT_MAP:
+        st.switch_page(REDIRECT_MAP[target])
+    else:
+        # Tenta achar por título exato se não estiver no mapa
+        pass
 
-# Sidebar para navegação
-st.sidebar.title("📊 Sistema de Otimização Visual")
-st.sidebar.markdown("*Plataforma Open Source interativa para aprendizado e resolução de problemas de Programação Linear*")
-st.sidebar.markdown("---")
-
-# Escolha da seção
-choice = st.sidebar.radio(
-    "Escolha a seção:",
-    list(PAGES.keys()),
-    format_func=lambda x: x,
-    help="Selecione o módulo que deseja utilizar",
-    key="navigation"
-)
-
-# Informações na sidebar
-st.sidebar.markdown("---")
-# st.sidebar.markdown("### ℹ️ Informações")
-# st.sidebar.info(
-#     "**Sistema desenvolvido para:**\n"
-#     "- Aprendizado didático\n"
-#     "- Resolução de problemas de PL\n"
-#     "- Visualização de algoritmos\n"
-#     "- Análise de resultados"
-# )
-
-# Status da sessão
-if "history" in st.session_state and st.session_state["history"]:
-    num_problems = len(st.session_state["history"])
-    st.sidebar.success(f"✅ {num_problems} problema(s) resolvido(s) nesta sessão")
-else:
-    st.sidebar.warning("📝 Nenhum problema resolvido ainda")
-
-# Limpar histórico
-if st.sidebar.button("🗑️ Limpar Histórico", help="Remove todos os problemas salvos"):
-    if "history" in st.session_state:
-        st.session_state["history"] = []
-        st.rerun()
-
-st.sidebar.markdown("---")
-st.sidebar.markdown("### 🚀 Versão")
-st.sidebar.text("v0.3 - Outubro 2025")
-
-# Executar a página selecionada
-try:
-    PAGES[choice]()
-except Exception as e:
-    st.error(f"❌ Erro ao carregar a página: {str(e)}")
-    st.exception(e)
-    st.info("💡 Tente recarregar a página ou selecionar outra seção.")
-
-# Footer
-st.markdown("---")
-st.markdown(
-    "<div style='text-align: center; color: #666; padding: 1rem;'>"
-    "Sistema de Otimização Visual - Desenvolvido para fins educacionais"
-    "</div>",
-    unsafe_allow_html=True
-)
+# Executar a navegação
+pg.run()

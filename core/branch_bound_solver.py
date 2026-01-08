@@ -20,41 +20,42 @@ class BranchBoundSolver:
         self.steps: List[str] = []
 
     # ------------------------------------------------------------------ PUBLIC API
-    def solve(
+    # ------------------------------------------------------------------ PUBLIC API
+    def initialize(
         self,
         c: List[float],
         A: List[List[float]],
         b: List[float],
         integer_vars: List[int] | None = None,
         node_limit: int = 100,
+        strategy: str = "BFS",
     ) -> None:
-        """Resolve o PLI por Branch & Bound.
-
-        Parameters
-        ----------
-        c, A, b : listas
-            Definição do problema Ax ≤ b, x ≥ 0, max cᵀx.
-        integer_vars : list[int], opcional
-            Índices (0‑based) das variáveis que devem ser inteiras. Por padrão
-            torna‑se todas as variáveis de decisão.
-        node_limit : int, default 100
-            Limite duro de nós na árvore (evita loops infinitos).
-        """
-
+        """Inicializa o solver para execução passo a passo."""
         # Reset state ---------------------------------------------------
         self.nodes.clear()
         self.steps.clear()
         self.best_solution = None
         self.best_value = float("-inf")
-
-        if integer_vars is None:
-            integer_vars = list(range(len(c)))
+        
+        # Store problem data
+        self.c = c
+        self.A = A
+        self.b = b
+        self.integer_vars = integer_vars if integer_vars is not None else list(range(len(c)))
+        self.node_limit = node_limit
+        self.strategy = strategy
+        
+        # Internal state
+        self.queue: List[int] = []
+        self.next_id = 1
+        self.finished = False
 
         # ----------------------------------------------------------- Raiz
         root_simplex = SimplexSolver()
-        root_simplex.solve(c, A, b, maximize=True)
+        root_simplex.solve(self.c, self.A, self.b, maximize=True)
         if not root_simplex.optimal or root_simplex.unbounded:
             self.steps.append("Problema relaxado sem solução ótima ou ilimitado.")
+            self.finished = True
             return
 
         root_sol, root_val = root_simplex.get_solution()
@@ -64,72 +65,111 @@ class BranchBoundSolver:
             bounds={},
             sol=root_sol,
             val=root_val,
-            int_vars=integer_vars,
+            int_vars=self.integer_vars,
         )
-        if self._is_int(root_sol, integer_vars):
+        if self._is_int(root_sol, self.integer_vars):
             self.best_solution, self.best_value = root_sol, root_val
             self.steps.append("Solução inteira já na raiz.")
+            self.finished = True
             return
 
-        # ---------------------------------------------------- Exploração
-        queue: List[int] = [0]
-        next_id = 1
-        while queue and next_id < node_limit:
-            current_id = queue.pop(0)
-            node = self.nodes[current_id]
-            # poda por processamento ou bound
-            if node["processed"] or node["value"] <= self.best_value:
-                continue
+        self.queue.append(0)
+
+    def step(self) -> bool:
+        """Executa um passo (processa um nó). Retorna True se continuar, False se terminou."""
+        if self.finished:
+            return False
+            
+        if not self.queue or self.next_id >= self.node_limit:
+            self.finished = True
+            return False
+
+        # Seleção do nó baseado na estratégia
+        if self.strategy == "BestBound":
+            self.queue.sort(key=lambda nid: self.nodes[nid]["value"], reverse=True)
+            current_id = self.queue.pop(0)
+        elif self.strategy == "DFS":
+            current_id = self.queue.pop() # LIFO
+        else: # BFS (default)
+            current_id = self.queue.pop(0) # FIFO
+
+        node = self.nodes[current_id]
+        
+        # poda por processamento ou bound
+        if node["processed"] or node["value"] <= self.best_value:
+            # Se podado, apenas retornamos True para tentar o próximo na próxima chamada
+            # Mas marcamos como processado se não estava
             node["processed"] = True
+            return True
+            
+        node["processed"] = True
 
-            frac_idx = self._first_frac(node["solution"], integer_vars)
-            if frac_idx == -1:  # não deveria ocorrer, mas por segurança
-                continue
+        frac_idx = self._first_frac(node["solution"], self.integer_vars)
+        if frac_idx == -1: 
+            return True
 
-            x_val = node["solution"][frac_idx]
-            self.steps.append(f"Branch em x{frac_idx+1} = {x_val:.3f}")
+        x_val = node["solution"][frac_idx]
+        self.steps.append(f"Branch em x{frac_idx+1} = {x_val:.3f}")
 
-            for op, bound in (("<=", math.floor(x_val)), (">=", math.ceil(x_val))):
-                new_bounds = deepcopy(node["bounds"])
-                new_bounds[frac_idx] = (op, bound)
+        for op, bound in (("<=", math.floor(x_val)), (">=", math.ceil(x_val))):
+            new_bounds = deepcopy(node["bounds"])
+            new_bounds[frac_idx] = (op, bound)
 
-                sub_A, sub_b = self._apply_bounds(A, b, new_bounds)
-                relax = SimplexSolver()
-                relax.solve(c, sub_A, sub_b, maximize=True)
+            sub_A, sub_b = self._apply_bounds(self.A, self.b, new_bounds)
+            relax = SimplexSolver()
+            relax.solve(self.c, sub_A, sub_b, maximize=True)
 
-                if not relax.optimal or relax.unbounded:
-                    self.steps.append(f"Sub‑infeasível x{frac_idx+1} {op} {bound}")
-                    self._add_node(
-                        node_id=next_id,
-                        parent=current_id,
-                        bounds=new_bounds,
-                        sol=None,
-                        val=float("-inf"),
-                        feasible=False,
-                        int_vars=integer_vars,
-                    )
-                    next_id += 1
-                    continue
-
-                sub_sol, sub_val = relax.get_solution()
-                new_node = self._add_node(
-                    node_id=next_id,
+            if not relax.optimal or relax.unbounded:
+                self.steps.append(f"Sub‑infeasível x{frac_idx+1} {op} {bound}")
+                self._add_node(
+                    node_id=self.next_id,
                     parent=current_id,
                     bounds=new_bounds,
-                    sol=sub_sol,
-                    val=sub_val,
-                    int_vars=integer_vars,
+                    sol=None,
+                    val=float("-inf"),
+                    feasible=False,
+                    int_vars=self.integer_vars,
+                    branch_reason=f"x{frac_idx+1} {op} {bound:.0f}"
                 )
+                self.next_id += 1
+                continue
 
-                # actualização da melhor solução inteira
-                if new_node["integer_feasible"] and sub_val > self.best_value:
-                    self.best_solution, self.best_value = sub_sol, sub_val
-                    self.steps.append(f"🎯 Melhor inteira atualizada: Z = {sub_val:.3f}")
-                # Enfileira nós fracionários promissores
-                elif not new_node["integer_feasible"] and sub_val > self.best_value:
-                    queue.append(next_id)
+            sub_sol, sub_val = relax.get_solution()
+            new_node = self._add_node(
+                node_id=self.next_id,
+                parent=current_id,
+                bounds=new_bounds,
+                sol=sub_sol,
+                val=sub_val,
+                int_vars=self.integer_vars,
+                branch_reason=f"x{frac_idx+1} {op} {bound:.0f}"
+            )
 
-                next_id += 1
+            # actualização da melhor solução inteira
+            if new_node["integer_feasible"] and sub_val > self.best_value:
+                self.best_solution, self.best_value = sub_sol, sub_val
+                self.steps.append(f"🎯 Melhor inteira atualizada: Z = {sub_val:.3f}")
+            # Enfileira nós fracionários promissores
+            elif not new_node["integer_feasible"] and sub_val > self.best_value:
+                self.queue.append(self.next_id)
+
+            self.next_id += 1
+            
+        return True
+
+    def solve(
+        self,
+        c: List[float],
+        A: List[List[float]],
+        b: List[float],
+        integer_vars: List[int] | None = None,
+        node_limit: int = 100,
+        strategy: str = "BFS",
+    ) -> None:
+        """Resolve o PLI por Branch & Bound."""
+        self.initialize(c, A, b, integer_vars, node_limit, strategy)
+        while self.step():
+            pass
 
     # ------------------------------------------------------------------ helpers
     def _add_node(
@@ -141,6 +181,7 @@ class BranchBoundSolver:
         val: float,
         int_vars: List[int] | None = None,
         feasible: bool = True,
+        branch_reason: str | None = None,
     ) -> Dict:
         """Cria e armazena um nó na lista self.nodes."""
         if int_vars is None:
@@ -157,6 +198,7 @@ class BranchBoundSolver:
             "feasible": feasible,
             "integer_feasible": int_feasible,
             "processed": False,
+            "branch_reason": branch_reason,
         }
         self.nodes.append(node)
         return node

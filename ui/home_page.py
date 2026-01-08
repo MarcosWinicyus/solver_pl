@@ -1,93 +1,107 @@
+
 import streamlit as st
 
 def home_page():
-    """
-    Página inicial do Sistema de Otimização Visual.
-    Apresenta o projeto, seus objetivos e os módulos disponíveis.
-    """
-    
-    # Título e Subtítulo com estilo
+    # Hero Section Minimalista
     st.markdown("""
-    <div style="text-align: center; padding: 2rem 0;">
-        <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">📊 Sistema de Otimização Visual</h1>
-        <p style="font-size: 1.2rem; color: #666;">
-            Uma plataforma interativa para explorar, resolver e aprender sobre<br>
-            <b>Programação Linear</b> e <b>Otimização Inteira</b>.
+    <div style="text-align: center; margin-top: 0px; margin-bottom: 50px;">
+        <h1 style="font-size: 3.5rem; background: -webkit-linear-gradient(45deg, #00CCFF, #3366ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            Solver PL
+        </h1>
+        <p style="font-size: 1.25rem; color: #888; font-weight: 300;">
+            Plataforma Didática de Otimização Linear e Inteira
         </p>
     </div>
     """, unsafe_allow_html=True)
-
-    st.divider()
-
-    # Seção de Introdução / Proposta
-    st.markdown("### 🎯 O que é este projeto?")
-    st.markdown("""
-    Este sistema foi desenvolvido com um propósito educacional claro: **desmistificar a Pesquisa Operacional**.
     
-    Ao invés de apenas entregar a resposta final, nossa ferramenta foca em mostrar o **"como"** e o **"porquê"**. 
-    Através de visualizações interativas e passos detalhados, você pode acompanhar o funcionamento interno 
-    de algoritmos clássicos de otimização.
-    """)
-
-    st.markdown("---")
-
-    # Seção dos Módulos (Algoritmos)
-    st.markdown("### 🚀 Módulos Disponíveis")
-    st.markdown("Explore nossos solvers especializados:")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.info("### 📐 Método Simplex")
+    # --- Linha 1: Solvers (Principais) ---
+    c_solv1, c_solv2 = st.columns(2)
+    
+    with c_solv1:
         st.markdown("""
-        O clássico algoritmo para resolução de Problemas de Programação Linear (PPL).
+        <div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333; height: 100%;">
+            <h3 style="color: #00CCFF;">📐 Simplex 2.0</h3>
+            <p style="color: #AAA; font-size: 0.9rem;">
+                Resolução passo a passo com <b>visualização 3D/2D</b> interativa, análise de tableau e múltiplas iterações.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
         
-        **Destaques:**
-        - ✨ **Passo a Passo:** Visualize cada iteração do Tableau.
-        - 🔍 **Análise Detalhada:** Identifique variáveis básicas e não-básicas.
-        - 📈 **Casos Especiais:** Detecção de múltiplas soluções, soluções ilimitadas e inviabilidade.
-        - 📝 **Entrada Flexível:** Digite sua função objetivo e restrições facilmente.
-        """)
-        # Botão simulado (apenas visual, a navegação é pela sidebar)
-        # st.button("Ir para Simplex", key="btn_simplex", disabled=True) 
-
-    with col2:
-        st.success("### 🌳 Branch & Bound")
+    with c_solv2:
         st.markdown("""
-        A técnica definitiva para Programação Linear Inteira (PLI).
-        
-        **Destaques:**
-        - 🌲 **Visualização de Árvore:** Veja a árvore de decisão crescer em tempo real.
-        - ✂️ **Poda Inteligente:** Entenda quando e por que um ramo é podado.
-        - 🔢 **Soluções Inteiras:** Garanta que suas variáveis de decisão sejam números inteiros.
-        - 📊 **Integração:** Utiliza o Simplex para resolver os relaxamentos lineares.
-        """)
-        # st.button("Ir para Branch & Bound", key="btn_bab", disabled=True)
+        <div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333; height: 100%;">
+            <h3 style="color: #28a745;">🌳 Branch & Bound</h3>
+            <p style="color: #AAA; font-size: 0.9rem;">
+                Algoritmo para problemas inteiros (PLI) com árvore de decisão interativa e estratégias de busca em profundidade/largura.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.markdown("---")
+    st.write("")
+    
+    # --- Linha 2: Ferramentas (Novidades) ---
+    c_tool1, c_tool2, c_tool3 = st.columns(3)
+    
+    with c_tool1:
+        st.markdown("""
+        <div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333; height: 100%;">
+            <h3 style="color: #ffc107;">🔄 Dualidade</h3>
+            <p style="color: #AAA; font-size: 0.9rem;">
+                Converta Problemas Primais em Duais instantaneamente e alterne entre os modos de resolução.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
 
-    # Seção de Features / Recursos Adicionais
-    st.markdown("### ✨ Recursos Adicionais")
-    
-    col_f1, col_f2, col_f3 = st.columns(3)
-    
-    with col_f1:
-        st.markdown("#### 👁️ Visualização Gráfica")
-        st.caption("Gráficos interativos que ajudam a entender a região viável e a função objetivo (para problemas de 2 variáveis).")
-        
-    with col_f2:
-        st.markdown("#### 📝 Histórico de Sessão")
-        st.caption("Mantenha o controle do seu aprendizado. Revise todos os problemas que você resolveu durante sua sessão atual.")
-        
-    with col_f3:
-        st.markdown("#### 🎓 Foco Didático")
-        st.caption("Explicações claras e feedback visual para auxiliar no entendimento dos conceitos teóricos.")
+    with c_tool2:
+        st.markdown("""
+        <div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333; height: 100%;">
+            <h3 style="color: #e91e63;">📊 Sensibilidade</h3>
+            <p style="color: #AAA; font-size: 0.9rem;">
+                Analise preços sombra, custos reduzidos e intervalos de estabilidade para os parâmetros da função objetivo e restrições.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.divider()
+    with c_tool3:
+        st.markdown("""
+        <div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333; height: 100%;">
+            <h3 style="color: #00bcd4;">📝 Forma Padrão</h3>
+            <p style="color: #AAA; font-size: 0.9rem;">
+                Converta qualquer PL para o formato canônico com variáveis de folga/excesso e comparação lado a lado.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    st.write("")
+
+    # --- Linha 3: Recursos (Biblioteca e Histórico) ---
+    c_res1, c_res2 = st.columns(2)
     
-    # Call to Action simples
-    st.markdown("""
-    <div style="text-align: center; color: #888;">
-        <small>👈 Utilize o menu lateral para navegar entre os módulos e começar a resolver seus problemas!</small>
-    </div>
-    """, unsafe_allow_html=True)
+    with c_res1:
+        st.markdown("""
+        <div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333; height: 100%;">
+            <h3 style="color: #9b59b6;">📚 Biblioteca</h3>
+            <p style="color: #AAA; font-size: 0.9rem;">
+                 Acervo de problemas clássicos (Dieta, Mochila, Mix de Produção) prontos para carregar e testar.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with c_res2:
+        st.markdown("""
+        <div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333; height: 100%;">
+            <h3 style="color: #e67e22;">🕑 Histórico</h3>
+            <p style="color: #AAA; font-size: 0.9rem;">
+                Suas sessões são salvas automaticamente. Recupere, exporte ou revise problemas anteriores.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # st.divider()
+    
+    # # Footer Minimalista
+    # st.markdown("""
+    # <div style="text-align: center; color: #555; font-size: 0.8rem; margin-top: 30px;">
+    #     Use a barra lateral para navegar • v0.4
+    # </div>
+    # """, unsafe_allow_html=True)

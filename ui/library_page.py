@@ -2,12 +2,14 @@ import streamlit as st
 from typing import Dict, List, Any
 
 def library_page():
-    st.header("📚 Biblioteca de Problemas Clássicos")
+    st.markdown("<h1 style='text-align: center;'>📚 Biblioteca de Problemas Clássicos</h1>", unsafe_allow_html=True)
     st.markdown("""
-    Explore problemas clássicos da Pesquisa Operacional. 
+    <p style='text-align: center; color: #666;'>
+    Explore problemas clássicos da Pesquisa Operacional. <br>
     Selecione um problema para carregar seus dados automaticamente no solver apropriado.
-    """)
-    st.divider()
+    </p>
+    """, unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
 
     # Definição dos Problemas
     problems = [
@@ -111,26 +113,88 @@ def library_page():
                 "maximize": True,
                 "int_vars": [0, 1]
             }
+        },
+        {
+            "title": "💎 Poliedro Distorcido (3D Visual)",
+            "category": "Programação Linear (Simplex)",
+            "description": """
+            Problema projetado para gerar uma **região factível tridimensional complexa**.
+            Ideal para testar a visualização 3D, rotação e identificação de vértices.
+            
+            **Restrições Geométricas:**
+            Múltiplos cortes em diferentes ângulos para formar um poliedro irregular (similar a um cristal lapidado).
+            
+            **Objetivo:** Maximizar soma das variáveis.
+            """,
+            "target_page": "📐 Método Simplex",
+            "data": {
+                "c": [1.0, 1.0, 1.0],
+                "A": [
+                    [1.0, 1.0, 1.0],  # Teto inclinado
+                    [1.0, 0.0, 0.0],  # Parede X
+                    [0.0, 1.0, 0.0],  # Parede Y
+                    [0.0, 0.0, 1.0],  # Parede Z
+                    [1.0, 2.0, 0.0],  # Corte diagonal XY
+                    [0.0, 2.0, 1.0]   # Corte diagonal YZ
+                ],
+                "b": [10.0, 6.0, 6.0, 6.0, 12.0, 12.0],
+                "maximize": True,
+                "int_vars": []
+            }
         }
     ]
 
+
+    # CSS para alinhar verticalmente o botão com o expander
+    st.markdown("""
+    <style>
+    div[data-testid="stHorizontalBlock"] {
+        align-items: center;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     # Renderização dos Cards
     for i, prob in enumerate(problems):
-        with st.container():
-            st.markdown(f"### {prob['title']}")
-            st.caption(f"📌 {prob['category']}")
-            
-            col_desc, col_action = st.columns([3, 1])
-            
-            with col_desc:
-                st.markdown(prob['description'])
-            
-            with col_action:
-                st.markdown("<br>", unsafe_allow_html=True) # Espaçamento
-                if st.button(f"Carregar Problema", key=f"btn_prob_{i}", type="primary"):
-                    load_problem_and_redirect(prob)
-            
-            st.divider()
+        col_main, col_btn = st.columns([0.85, 0.15])
+        
+        with col_main:
+            with st.expander(f"{prob['title']} — {prob['category']}"):
+                
+                c_text, c_math = st.columns(2)
+                
+                with c_text:
+                    st.markdown("**Descrição:**")
+                    st.markdown(prob['description'])
+                
+                with c_math:
+                    st.markdown("**Modelagem Matemática:**")
+                    
+                    # Dados do problema
+                    d = prob['data']
+                    c = d['c']
+                    A = d['A']
+                    b = d['b']
+                    is_max = d['maximize']
+                    
+                    # Construção do LaTeX
+                    # Função Objetivo
+                    obj_str = " + ".join([f"{val}x_{j+1}" for j, val in enumerate(c)])
+                    st.latex(f"{'Max' if is_max else 'Min'} \ Z = {obj_str}")
+                    
+                    # Restrições
+                    st.markdown("Sujeito a:")
+                    for r_idx, row in enumerate(A):
+                        lhs = " + ".join([f"{val}x_{j+1}" for j, val in enumerate(row)])
+                        rhs = b[r_idx]
+                        st.latex(f"{lhs} \le {rhs}")
+                    
+                    st.latex("x_j \ge 0")
+
+        with col_btn:
+            if st.button("🚀 Carregar", key=f"btn_prob_{i}", help=f"Resolver: {prob['title']}"):
+                load_problem_and_redirect(prob)
+
 
 def load_problem_and_redirect(problem: Dict[str, Any]):
     """Carrega os dados na sessão e redireciona."""

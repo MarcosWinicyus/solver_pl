@@ -3,7 +3,7 @@ import streamlit as st
 import numpy as np
 
 
-def show_tableau(T, caption="", pivot: tuple[int, int] | None = None, basis_vars=None):
+def show_tableau(T, caption="", pivot: tuple[int, int] | None = None, basis_vars=None, show_legend=True):
     """
     Mostra o tableau com formatação aprimorada e índices corretos das variáveis básicas.
     
@@ -12,6 +12,7 @@ def show_tableau(T, caption="", pivot: tuple[int, int] | None = None, basis_vars
         caption: Título/descrição do tableau
         pivot: Tupla (linha, coluna) para destacar elemento pivot
         basis_vars: Lista de nomes das variáveis básicas para os índices das linhas
+        show_legend: Se deve mostrar a legenda de cores (default True)
     """
     rows, cols = T.shape
     n_slack = rows - 1
@@ -78,7 +79,7 @@ def show_tableau(T, caption="", pivot: tuple[int, int] | None = None, basis_vars
     st.dataframe(styler, width='stretch')
     
     # Adicionar legenda explicativa se houver pivot
-    if pivot and pivot != (-1, -1):
+    if show_legend and pivot and pivot != (-1, -1):
         st.markdown("""
         **Legenda:**
         - 🟨 **Amarelo Forte**: Elemento pivot
@@ -87,7 +88,7 @@ def show_tableau(T, caption="", pivot: tuple[int, int] | None = None, basis_vars
         """)
 
 
-def show_tableau_with_basis_info(T, basis_vars=None, caption="", pivot=None):
+def show_tableau_with_basis_info(T, basis_vars=None, caption="", pivot=None, show_legend=True):
     """
     Mostra o tableau com informações adicionais sobre a base.
     
@@ -96,9 +97,10 @@ def show_tableau_with_basis_info(T, basis_vars=None, caption="", pivot=None):
         basis_vars: Lista com tuplas (nome_variavel, valor) das variáveis básicas
         caption: Título do tableau
         pivot: Elemento pivot para destacar
+        show_legend: Se deve mostrar a legenda de cores
     """
     # Mostrar tableau principal com índices corretos
-    show_tableau(T, caption, pivot, basis_vars)
+    show_tableau(T, caption, pivot, basis_vars, show_legend=show_legend)
     
     # Mostrar informações da base se fornecidas
     if basis_vars:
@@ -187,25 +189,34 @@ def create_iteration_summary(iteration_num, entering_var, leaving_var, pivot_ele
             st.write(f"• {ratio_info}")
 
 
-def show_final_solution(solution, objective_value, basis_info=None, maximize=True):
+def show_final_solution(solution, objective_value, basis_info=None, maximize=True, method="Simplex", iterations=0):
     """
     Mostra a solução final de forma organizada e destacada.
     
     Args:
         solution: Lista com valores das variáveis
         objective_value: Valor ótimo da função objetivo
-        basis_info: Informações sobre as variáveis básicas
+        basis_info: Informações sobre as variáveis básicas (não usado mais na UI simplificada, mantido para compatibilidade)
         maximize: Se o problema é de maximização
+        method: Nome do método utilizado
+        iterations: Número total de iterações
     """
-    st.markdown("## 🎉 Solução Ótima Encontrada!")
+    # Linha única com: Valor Z | Método | Iterações
+    col1, col2, col3 = st.columns(3)
     
-    # Valor da função objetivo
-    st.metric(
-        label=f"**Valor {'Máximo' if maximize else 'Mínimo'} da Função Objetivo**",
-        value=f"Z = {objective_value:.3f}",
-        delta=None
-    )
-    
+    with col1:
+        st.metric(
+            label=f"**Valor {'Máximo' if maximize else 'Mínimo'} (Z)**",
+            value=f"{objective_value:.3f}",
+            delta=None
+        )
+        
+    with col2:
+        st.metric(label="**Método**", value=method)
+        
+    with col3:
+        st.metric(label="**Iterações**", value=str(iterations))
+        
     # Valores das variáveis
     st.markdown("### 📊 Valores das Variáveis")
     
@@ -226,18 +237,6 @@ def show_final_solution(solution, objective_value, basis_info=None, maximize=Tru
                         st.success(f"**x{var_idx+1} = {value:.3f}**")
                     else:
                         st.info(f"x{var_idx+1} = {value:.3f}")
-    
-    # Informações adicionais sobre a base
-    if basis_info:
-        st.markdown("### 🔧 Informações da Base Final")
-        st.markdown("**Variáveis Básicas (diferentes de zero):**")
-        
-        basic_vars = [info for info in basis_info if abs(info[1]) > 1e-6]
-        if basic_vars:
-            for var_name, value in basic_vars:
-                st.write(f"• {var_name} = {value:.3f}")
-        else:
-            st.write("Todas as variáveis básicas têm valor zero.")
 
 
 def show_optimization_summary(method="Simplex", iterations=0, status="Optimal"):
