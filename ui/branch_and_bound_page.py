@@ -4,11 +4,11 @@ import numpy as np # Adicionado para tratar tipos do numpy na formatação
 
 from .helpers import _store_problem, _load_problem, number_emojis
 from core.branch_bound_solver import BranchBoundSolver
-
+from ui.lang import t
 
 def bab_ui():
-    st.markdown("<h1 style='text-align: center;'>🌳 Branch & Bound</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #888;'>Resolução de Problemas de Programação Linear Inteira</p>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: center;'>{t('bab.title')}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<p style='text-align: center; color: #888;'>{t('bab.subtitle')}</p>", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
 
     # Carregar estado anterior se existir
@@ -19,31 +19,31 @@ def bab_ui():
     # Layout de entrada similar ao Simplex
     col_counts = st.columns(3)
     with col_counts[0]:
-        n_vars = st.number_input("🔢 **Número de Variáveis**", 2, 10, max(len(saved_c), 2), help="Quantidade de variáveis de decisão")
+        n_vars = st.number_input(t("simplex.n_vars"), 2, 10, max(len(saved_c), 2), help=t("simplex.vars_help"))
     with col_counts[1]:
-        n_cons = st.number_input("📏 **Número de Restrições**", 1, 10, max(len(saved_A), 1), help="Quantidade de restrições do problema")
+        n_cons = st.number_input(t("simplex.n_cons"), 1, 10, max(len(saved_A), 1), help=t("simplex.cons_help"))
         
     with col_counts[2]:
         maximize = st.selectbox(
-            "🎯 **Objetivo**", 
-            ["Maximização", "Minimização"], 
+            t("simplex.obj_type"), 
+            [t("simplex.maximize"), t("simplex.minimize")], 
             index=0 if saved.get("maximize", True) else 1
         )
-        is_max = (maximize == "Maximização")
+        is_max = (maximize == t("simplex.maximize"))
 
     # Função objetivo
-    label_obj = "Função Objetivo (Maximização)" if is_max else "Função Objetivo (Minimização)"
-    st.markdown(f"#### 📝 **{label_obj}**", help="Defina os coeficientes da função objetivo")
+    label_obj = t("common.obj_max") if is_max else t("common.obj_min")
+    st.markdown(f"#### {label_obj}", help=t("simplex.obj_help"))
     
     obj_cols = st.columns(n_vars)
     c = []
     for i in range(n_vars):
         default = saved_c[i] if i < len(saved_c) else 1.0
         with obj_cols[i]:
-            c.append(st.number_input(f"**x{i+1}**", value=default, key=f"bb_c_{i}", help=f"Coeficiente da variável x{i+1}"))
+            c.append(st.number_input(f"**x{i+1}**", value=default, key=f"bb_c_{i}", help=f"{t('simplex.coef_help')} x{i+1}"))
 
     # Seleção de variáveis inteiras
-    st.markdown("### 🔢 **Variáveis Inteiras**", help="Marque quais variáveis devem ter valores inteiros")
+    st.markdown(t("bab.int_vars"), help=t("bab.int_vars_help"))
     
     int_cols = st.columns(n_vars)
     int_vars = []
@@ -53,32 +53,32 @@ def bab_ui():
     
     for i in range(n_vars):
         with int_cols[i]:
-            is_int = st.checkbox(f"**x{i+1}** é inteira", value=(i in default_int_vars), key=f"int_{i}")
+            is_int = st.checkbox(f"**x{i+1}** {t('bab.chk_int')}", value=(i in default_int_vars), key=f"int_{i}")
             if is_int:
                 int_vars.append(i)
 
     # Restrições
     # Restrições
-    with st.expander("📋 **Restrições**", expanded=True):
+    with st.expander(t("simplex.constraints"), expanded=True):
         
         A, b = [], []
         senses = []
         for r in range(n_cons):
-            st.markdown(f"**Restrição  - {number_emojis[r+1]}:**")
+            st.markdown(f"**{t('common.restriction')}  - {number_emojis[r+1]}:**")
             cols = st.columns(n_vars + 2)
             row = []
             
             for i in range(n_vars):
                 default = saved_A[r][i] if r < len(saved_A) and i < len(saved_A[r]) else 1.0
                 with cols[i]:
-                    row.append(st.number_input(f"**x{i+1}**", key=f"bb_a_{r}_{i}", value=default, help=f"Coeficiente de x{i+1}"))
+                    row.append(st.number_input(f"**x{i+1}**", key=f"bb_a_{r}_{i}", value=default, help=f"{t('simplex.coef_help')} x{i+1}"))
             
             with cols[n_vars]:
-                sense = st.selectbox("**Tipo**", ["≤", "=", "≥"], index=0, key=f"bb_sense_{r}")
+                sense = st.selectbox(t("simplex.type_label"), ["≤", "=", "≥"], index=0, key=f"bb_sense_{r}")
                 
             with cols[n_vars+1]:
                 default_rhs = saved_b[r] if r < len(saved_b) else 1.0
-                rhs = st.number_input("**Valor**", key=f"bb_b_{r}", value=default_rhs, help=f"Valor do lado direito")
+                rhs = st.number_input(t("simplex.rhs_label"), key=f"bb_b_{r}", value=default_rhs, help=f"Valor do lado direito")
             
             A.append(row)
             b.append(rhs)
@@ -95,30 +95,30 @@ def bab_ui():
     
     with col_strat:
         strategy_options = {
-            "Busca em Largura (BFS)": "BFS",
-            "Busca em Profundidade (DFS)": "DFS",
-            "Melhor Limitante (BestBound)": "BestBound"
+            t("bab.strats.BFS"): "BFS",
+            t("bab.strats.DFS"): "DFS",
+            t("bab.strats.BestBound"): "BestBound"
         }
         
         selected_strategy_label = st.selectbox(
-            "🔍 **Estratégia de Busca**",
+            t("bab.strategy"),
             list(strategy_options.keys()),
             index=0,
-            help="Escolha como o algoritmo explora a árvore.\n\nBFS: Nível a nível.\nDFS: Profundidade primeiro.\nBestBound: Maior Z primeiro."
+            help=t("bab.strat_help")
         )
-        selected_strategy = strategy_options[selected_strategy_label]
+        selected_strategy = strategy_options.get(selected_strategy_label, "BFS")
 
     with col_mode:
         # Espaçamento para alinhar com o input
         st.write("")
         st.write("")
-        step_by_step = st.checkbox("👣 **Passo a Passo**", value=False, help="Executar nó a nó.")
+        step_by_step = st.checkbox(t("simplex.step_by_step"), value=False, help="Executar nó a nó.")
 
     with col_btn:
         # Espaçamento para alinhar com o input
         st.write("")
         st.write("")
-        solve_clicked = st.button("🚀 **Iniciar**", type="primary", use_container_width=True)
+        solve_clicked = st.button(t("bab.btn_start"), type="primary", width="stretch")
 
     # Botão de Próximo Passo - Será renderizado no cabeçalho da árvore
     run_next_step = False # Flag para executar lógica
@@ -126,7 +126,7 @@ def bab_ui():
 
     if solve_clicked:
         try:
-            with st.spinner("🔄 Inicializando problema..." if step_by_step else "🔄 Resolvendo problema inteiro..."):
+            with st.spinner(t("bab.messages.init") if step_by_step else t("bab.messages.solving")):
                 # Converter restrições para formato Ax <= b
                 A_conv, b_conv = [], []
                 for row, rhs, sn in zip(A, b, senses):
@@ -159,19 +159,10 @@ def bab_ui():
                     st.session_state["bb_solver"] = solver # Salva para exibir resultados abaixo
                     
         except Exception as e:
-            st.error(f"❌ **Erro durante a resolução:** {str(e)}")
+            st.error(f"{t('bab.messages.error')} {str(e)}")
             st.exception(e)
 
     # Lógica de execução do próximo passo (verificação via chave ou botão renderizado posteriormente)
-    # Como o botão será renderizado depois, precisamos checar se foi clicado no rerun anterior ou capturar aqui?
-    # Streamlit buttons return True on the script run immediately following the click.
-    # We will check st.session_state for a specific key if we use a keyed button later,
-    # OR we need to render the button HERE if we want to capture 'next_step_clicked' easily without flow issues.
-    # BUT user wants button next to header.
-    # Allow rendering button later, but we need to check its state.
-    # Actually, standard Streamlit flow: Render -> Click -> Rerun -> Check.
-    # So we can define the button later.
-    
     pass
 
     # Exibição dos Resultados (sempre que houver um solver no estado)
@@ -181,33 +172,33 @@ def bab_ui():
         # Resultados Parciais ou Finais
         if solver.nodes: # Só mostrar se já tiver algum nó
             if solver.finished and solver.best_solution is None:
-                 st.error("❌ **Nenhuma solução inteira encontrada**")
-                 st.info("Isso pode indicar que o problema é infactível ou que não existem soluções inteiras.")
+                 st.error(t("bab.messages.no_int_sol"))
+                 st.info(t("bab.messages.no_int_bg"))
             else:
                  # Exibir estatísticas (parciais ou finais)
                  best_val_display = f"{solver.best_value:.3f}" if solver.best_value != float("-inf") else "N/A"
                  
                  st.markdown("---") # Adicionado entre botões e números dos resultados
                  col_stats1, col_stats2, col_stats3, col_stats4 = st.columns(4)
-                 with col_stats1: st.metric("**Melhor Z Atual/Final**", best_val_display)
-                 with col_stats2: st.metric("**Nós Explorados**", len(solver.nodes))
-                 with col_stats3: st.metric("**Nós na Fila**", len(solver.queue))
+                 with col_stats1: st.metric(t("bab.results.best_z"), best_val_display)
+                 with col_stats2: st.metric(t("bab.results.nodes_exp"), len(solver.nodes))
+                 with col_stats3: st.metric(t("bab.results.nodes_queue"), len(solver.queue))
                  with col_stats4: 
                      integer_nodes = sum(1 for n in solver.nodes if n.get("integer_feasible", False))
-                     st.metric("**Soluções Inteiras**", integer_nodes)
+                     st.metric(t("bab.results.int_sols"), integer_nodes)
 
             # Cabeçalho da Árvore + Botão Próximo Passo
             # st.markdown("---") # Removido a pedido do usuário
             col_tree_header, col_tree_btn = st.columns([0.8, 0.2])
             
             with col_tree_header:
-                 st.markdown("### 🌳 **Árvore de Branch & Bound**")
+                 st.markdown(t("bab.results.tree_title"))
             
             with col_tree_btn:
                  # Se passo a passo ativo e não terminou
                  if step_by_step and not solver.finished:
                       # Alinhar à direita para ficar próximo ao header mas oposto
-                      if st.button("⏭️ **Próximo Passo**", key="btn_next_step", type="secondary", use_container_width=True):
+                      if st.button(t("bab.btn_next"), key="btn_next_step", type="secondary", width="stretch"):
                           run_next_step = True
             
             # Executar lógica do próximo passo se clicado
@@ -225,13 +216,16 @@ def bab_ui():
             with col_results:
                 # Logs Primeiro (Top-Left)
                 if solver.steps:
-                    with st.expander("📝 **Log de Passos**", expanded=True):
+                    with st.expander(t("bab.results.log_title"), expanded=True):
                         for i, step in enumerate(solver.steps):
-                             st.write(f"**{i+1}.** {step}")
+                             step_text = step
+                             if isinstance(step, dict):
+                                 step_text = t(step["key"]).format(*step.get("params", []))
+                             st.write(f"**{i+1}.** {step_text}")
 
                 # Melhor Solução Inteira (Bottom-Left)
                 if solver.best_solution is not None:
-                    st.markdown("### 📊 **Melhor Solução Inteira**")
+                    st.markdown(t("bab.results.best_int_sol"))
                     cols_per_row = min(3, n_vars) # Reduzido para caber na coluna
                     rows_needed = (n_vars + cols_per_row - 1) // cols_per_row
                     solution = solver.best_solution[:n_vars]
@@ -247,26 +241,19 @@ def bab_ui():
                                     st.success(f"**x{var_idx+1} = {val_fmt}**")
             
             with col_legend:
-                st.markdown("### 🏷️ **Legenda**")
-                st.info("ℹ️ Clique em um nó para ver detalhes.")
-                st.markdown("""
-                - 🟢 **Verde (Ótima)**: Melhor solução inteira.
-                - 🟣 **Roxo (Inteira)**: Solução inteira viável (sub-ótima).
-                - 🔴 **Vermelho (Infactível)**: Sem solução.
-                - ⚪ **Cinza (Podado)**: Limite pior que o incumbente.
-                - 🔵 **Azul (Relaxação)**: Solução fracionária.
-                - 🟡 **Amarelo (Raiz)**: Nó inicial.
-                """)
+                st.markdown(t("bab.legend"))
+                st.info(t("bab.results.legend_info"))
+                st.markdown(t("bab.results.legend_items"))
 
         elif solver.finished: # Sem nós mas finalizado (Erro na Raiz)
-             st.error("❌ **Não foi possível iniciar o Branch & Bound**")
-             st.warning("""
-             O problema relaxado (na raiz) não pôde ser resolvido. Possíveis causas:
-             - **Infactibilidade**: As restrições são conflitantes.
-             - **Ilimitado**: A função objetivo tende ao infinito (verifique se escolheu Max/Min corretamente).
-             """)
+             st.error(t("bab.messages.root_error"))
+             st.warning(t("bab.messages.root_details"))
              if solver.steps:
-                 st.info(f"Log do Solver: {solver.steps[-1]}")
+                 last_step = solver.steps[-1]
+                 step_text = last_step
+                 if isinstance(last_step, dict):
+                     step_text = t(last_step["key"]).format(*last_step.get("params", []))
+                 st.info(f"Log do Solver: {step_text}")
 
 
 def _format_solution(solution, max_vars_to_show=5):
@@ -303,12 +290,12 @@ def _render_branch_bound_tree(solver):
         edges_data = []
 
         status_map = {
-            "OPTIMAL": {"label": "Solução Ótima", "color": "#2e7d32", "icon": "verified"},
-            "INTEGER": {"label": "Solução Inteira", "color": "#8e24aa", "icon": "check_circle"},
-            "INFEASIBLE": {"label": "Infactível", "color": "#f44336", "icon": "lock"},
-            "PRUNED": {"label": "Podado por Limite", "color": "#9e9e9e", "icon": "cancel"},
-            "FRACTIONAL": {"label": "Relaxação", "color": "#2196f3", "icon": "functions"},
-            "ROOT": {"label": "Raiz", "color": "#ffc107", "icon": "adjust"}
+            "OPTIMAL": {"label": t("bab.tree_labels.OPTIMAL"), "color": "#2e7d32"},
+            "INTEGER": {"label": t("bab.tree_labels.INTEGER"), "color": "#8e24aa"},
+            "INFEASIBLE": {"label": t("bab.tree_labels.INFEASIBLE"), "color": "#f44336"},
+            "PRUNED": {"label": t("bab.tree_labels.PRUNED"), "color": "#9e9e9e"},
+            "FRACTIONAL": {"label": t("bab.tree_labels.FRACTIONAL"), "color": "#2196f3"},
+            "ROOT": {"label": t("bab.tree_labels.ROOT"), "color": "#ffc107"}
         }
 
         for node_info in solver.nodes:
@@ -363,14 +350,14 @@ def _render_branch_bound_tree(solver):
                 })
         
         node_styles = [
-            NodeStyle(status["label"], status["color"], "caption", status["icon"])
+            NodeStyle(status["label"], status["color"], "caption")
             for status in status_map.values()
         ]
 
         # Gerar estilos de aresta dinamicamente para cada label única
         unique_edge_labels = set(e["data"]["label"] for e in edges_data)
         edge_styles = [
-            EdgeStyle(label, color="#888888", directed=True, labeled=True)
+            EdgeStyle(label, color="#888888", directed=True, caption=label)
             for label in unique_edge_labels
         ]
 
@@ -391,9 +378,6 @@ def _render_branch_bound_tree(solver):
             key=f"bb_tree_viz_{len(solver.nodes)}" # Chave dinâmica para forçar re-renderização do layout a cada passo
         )
         
-
-
-
     except Exception as e:
         st.error(f"❌ Ocorreu um erro inesperado ao tentar renderizar a árvore: {str(e)}")
         st.exception(e)

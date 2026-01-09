@@ -1,0 +1,290 @@
+{
+    "menu": {
+        "home": "Home",
+        "simplex": "Simplex",
+        "bab": "Branch & Bound",
+        "duality": "Dualidade (Primal-Dual)",
+        "sensitivity": "Análise de Sensibilidade",
+        "std_form": "Forma Padrão",
+        "library": "Biblioteca de Problemas",
+        "history": "Histórico de Sessão",
+        "principal": "Principal",
+        "solvers": "Solvers",
+        "tools": "Ferramentas"
+    },
+    "tableau": {
+        "legend_title": "**Legenda:**",
+        "legend_pivot": "🟨 **Amarelo Forte**: Elemento pivot",
+        "legend_row_col": "🟡 **Amarelo Claro**: Linha e coluna do pivot",
+        "legend_obj": "🔵 **Azul Claro**: Linha da função objetivo (Z)",
+        "status_basis": "#### 📋 **Status da Base Atual**",
+        "basic_vars_nz": "**Variáveis Básicas (≠ 0):**",
+        "basic_vars_z": "**Variáveis Básicas (= 0):**",
+        "iter_summary": "### 🔄 Resumo da Iteração {0}",
+        "var_out": "**🔴 Sai da Base**",
+        "pivot_elem": "**⚡ Elemento Pivot**",
+        "var_in": "**🟢 Entra na Base**",
+        "ratio_details": "**📊 Detalhes do Teste da Razão:**",
+        "opt_summary": "### 📈 Resumo da Otimização",
+        "val_vars": "### 📊 Valores das Variáveis",
+        "val_max": "**Valor Máximo (Z)**",
+        "val_min": "**Valor Mínimo (Z)**",
+        "method": "**Método**",
+        "iterations": "**Iterações**",
+        "status": "**Status:** {0}"
+    },
+    "home": {
+        "title": "Solver PL",
+        "subtitle": "Plataforma Didática de Otimização Linear e Inteira",
+        "simplex_title": "📐 Simplex",
+        "simplex_desc": "Resolução passo a passo com <b>visualização 3D/2D</b> interativa, análise de tableau e múltiplas iterações.",
+        "bab_title": "🌳 Branch & Bound",
+        "bab_desc": "Algoritmo para problemas inteiros (PLI) com árvore de decisão interativa e estratégias de busca em profundidade/largura.",
+        "duality_title": "🔄 Dualidade",
+        "duality_desc": "Converta Problemas Primais em Duais instantaneamente e alterne entre os modos de resolução.",
+        "sensitivity_title": "📊 Sensibilidade",
+        "sensitivity_desc": "Analise preços sombra, custos reduzidos e intervalos de estabilidade para os parâmetros da função objetivo e restrições.",
+        "std_form_title": "📝 Forma Padrão",
+        "std_form_desc": "Converta qualquer PL para o formato canônico com variáveis de folga/excesso e comparação lado a lado.",
+        "library_title": "📚 Biblioteca",
+        "library_desc": "Acervo de problemas clássicos (Dieta, Mochila, Mix de Produção) prontos para carregar e testar.",
+        "history_title": "🕑 Histórico",
+        "history_desc": "Suas sessões são salvas automaticamente. Recupere, exporte ou revise problemas anteriores.",
+        "multilang_title": "🌐 Multi-Idioma",
+        "multilang_desc": "Suporte total a i18n via JSON. Contribua facilmente adicionando arquivos de tradução."
+    },
+    "simplex": {
+        "title": "📐 Método Simplex - Tableau",
+        "n_vars": "🔢 **Número de Variáveis**",
+        "n_cons": "📏 **Número de Restrições**",
+        "obj_type": "🎯 Tipo de otimização:",
+        "obj_func": "📝 **Coeficientes da Função Objetivo**",
+        "constraints": "📋 **Restrições do Problema**",
+        "btn_solve": "🚀 **Resolver Problema**",
+        "didactic": "🎓 **Modo Didático**",
+        "step_by_step": "👣 **Passo a Passo**",
+        "maximize": "🔺 Maximizar",
+        "minimize": "🔻 Minimizar",
+        "vars_help": "Quantidade de variáveis de decisão",
+        "cons_help": "Quantidade de restrições do problema",
+        "obj_help": "Tipo de otimização em relação ao valor de Z",
+        "coef_help": "Coeficiente da variável",
+        "rhs_label": "**Valor**",
+        "type_label": "**Tipo**",
+        "results": {
+            "unbounded": "⚠️ **Problema Ilimitado** - A função objetivo pode crescer infinitamente",
+            "infeasible": "❌ **Não foi possível encontrar solução ótima** (Inviável)",
+            "optimal_found": "🎉 **Solução Ótima Encontrada!**",
+            "iterations_title": "### 📊 **Iterações do Algoritmo Simplex**",
+            "next_step": "⏭️ **Próximo Passo**",
+            "pivot_summary": "#### 🔄 **Resumo da Operação de Pivoteamento**",
+            "enters_basis": "**🟢 Entra na Base:**",
+            "leaves_basis": "**🔴 Sai da Base:**",
+            "pivot_element": "**⚡ Elemento Pivot:**",
+            "tech_details": "#### 📋 **Detalhes Técnicos**",
+            "pivot_pos": "**Posição do Pivot:**",
+            "ops_performed": "**Operações Realizadas:**",
+            "basis_analysis": "#### 📊 **Análise da Base Atual**",
+            "interpretation": "**💡 Interpretação:**",
+            "active_vars": "• **Variáveis de decisão ativas:**",
+            "slack_vars": "• **Folgas disponíveis:**",
+            "non_basic": "• **Variáveis não-básicas (= 0):**",
+            "applied_row": "**Linha Aplicada:**",
+            "plot_title_2d": "Visualização 2D da Região Factível",
+            "plot_title_3d": "Visualização 3D da Região Factível",
+            "feasible_region": "Região Factível",
+            "plot_2d": "### 📈 **Visualização da Região Factível (2D)**",
+            "plot_3d": "### 🧊 **Visualização da Região Factível (3D)**",
+            "details": {
+                "line": "- Linha: {0}",
+                "col": "- Coluna: {0}",
+                "val": "- Valor: {0:.6f}",
+                "op_div": "- ✅ Linha {0} ÷ {1:.3f}",
+                "op_elim": "- ✅ Eliminar coluna {0}",
+                "op_update": "- ✅ Atualizar base"
+            }
+        },
+        "log": {
+            "init_bigm": "Início Big-M",
+            "init_bigm_desc": "**Tableau Inicial (Método Big-M):**\n\n• **Variáveis:** {0}\n• **Base Inicial:** {1}\n• **Penalidade M:** {2}\n\n**Ajustes Realizados:**\n• Restrições com RHS negativo foram convertidas.\n• Variáveis artificiais adicionadas onde necessário.",
+            "infeasible": "Inviável",
+            "infeasible_desc": "## ❌ PROBLEMA INVIÁVEL\n\nO algoritmo convergiu, mas variáveis artificiais permanecem na base com valor positivo.\nIsso indica que não existe solução que satisfaça todas as restrições.",
+            "optimal": "Ótimo Encontrado",
+            "optimal_desc": "## ✅ SOLUÇÃO ÓTIMA!\n\n**Base Final:** {0}\n**Valor da Função Objetivo:** {1:.4f}",
+            "unbounded": "Ilimitado",
+            "unbounded_desc": "## ❌ ILIMITADO\n\nA variável **{0}** pode crescer indefinidamente.",
+            "timeout": "Timeout",
+            "timeout_desc": "Limite de {0} iterações atingido.",
+            "iteration": "Iteração {0}",
+            "iteration_desc": "## 🔄 ITERAÇÃO {0}\n\n• **Entra:** {1} (Custo reduzido: {2:.2f})\n• **Sai:** {3}\n• **Pivot:** Linha {4}, Coluna {5}"
+        }
+    },
+    "bab": {
+        "title": "🌳 Branch & Bound",
+        "subtitle": "Resolução de Problemas de Programação Linear Inteira",
+        "int_vars": "### 🔢 **Variáveis Inteiras**",
+        "int_vars_help": "Marque quais variáveis devem ter valores inteiros",
+        "chk_int": "é inteira",
+        "strategy": "🔍 **Estratégia de Busca**",
+        "strat_help": "Escolha como o algoritmo explora a árvore.\n\nBFS: Nível a nível.\nDFS: Profundidade primeiro.\nBestBound: Maior Z primeiro.",
+        "strats": {
+            "BFS": "Busca em Largura (BFS)",
+            "DFS": "Busca em Profundidade (DFS)",
+            "BestBound": "Melhor Limitante (BestBound)"
+        },
+        "btn_start": "🚀 **Iniciar**",
+        "btn_next": "⏭️ **Próximo Passo**",
+        "legend": "🏷️ **Legenda**",
+        "messages": {
+            "init": "🔄 Inicializando problema...",
+            "solving": "🔄 Resolvendo problema inteiro...",
+            "error": "❌ **Erro durante a resolução:**",
+            "no_int_sol": "❌ **Nenhuma solução inteira encontrada**",
+            "no_int_bg": "Isso pode indicar que o problema é infactível ou que não existem soluções inteiras.",
+            "root_error": "❌ **Não foi possível iniciar o Branch & Bound**",
+            "root_details": "O problema relaxado (na raiz) não pôde ser resolvido. Possíveis causas:\n- **Infactibilidade**: As restrições são conflitantes.\n- **Ilimitado**: A função objetivo tende ao infinito (verifique se escolheu Max/Min corretamente)."
+        },
+        "results": {
+            "best_z": "**Melhor Z Atual/Final**",
+            "nodes_exp": "**Nós Explorados**",
+            "nodes_queue": "**Nós na Fila**",
+            "int_sols": "**Soluções Inteiras**",
+            "tree_title": "### 🌳 **Árvore de Branch & Bound**",
+            "log_title": "📝 **Log de Passos**",
+            "best_int_sol": "### 📊 **Melhor Solução Inteira**",
+            "legend_info": "ℹ️ Clique em um nó para ver detalhes.",
+            "legend_items": "\n                - 🟢 **Verde (Ótima)**: Melhor solução inteira.\n                - 🟣 **Roxo (Inteira)**: Solução inteira viável (sub-ótima).\n                - 🔴 **Vermelho (Infactível)**: Sem solução.\n                - ⚪ **Cinza (Podado)**: Limite pior que o incumbente.\n                - 🔵 **Azul (Relaxação)**: Solução fracionária.\n                - 🟡 **Amarelo (Raiz)**: Nó inicial.\n                "
+        },
+        "log": {
+            "relaxed_infeasible": "Problema relaxado sem solução ótima ou ilimitado.",
+            "integer_root": "Solução inteira já na raiz.",
+            "branch": "Branch em x{0} = {1:.3f}",
+            "sub_infeasible": "Sub‑infactível x{0} {1} {2}",
+            "update_best": "🎯 Melhor inteira atualizada: Z = {0:.3f}"
+        },
+        "tree_labels": {
+            "OPTIMAL": "Solução Ótima",
+            "INTEGER": "Solução Inteira",
+            "INFEASIBLE": "Infactível",
+            "PRUNED": "Podado por Limite",
+            "FRACTIONAL": "Relaxação",
+            "ROOT": "Raiz"
+        }
+    },
+    "duality": {
+        "title": "🔄 Dualidade (Conversor Primal-Dual)",
+        "subtitle": "Ferramenta para converter problemas Primais em seus equivalentes Duais.",
+        "theorem": "<b>Teorema da Dualidade:</b> Primal <b>Max</b> Z = cx (Ax ≤ b) ↔ Dual <b>Min</b> W = by (Aᵀy ≥ c)",
+        "primal_def": "1. Definição do Problema Primal",
+        "btn_convert": "🔄 Converter para DUAL",
+        "result_title": "2. Problema Dual Resultante",
+        "domain": "**Domínio das Variáveis:**",
+        "solve_label": "###### Resolver:",
+        "btn_solve_simplex": "📐 Resolver no Simplex",
+        "btn_solve_bb": "🌳 Resolver no B&B",
+        "primal": "Primal",
+        "dual": "Dual"
+    },
+    "sensitivity": {
+        "title": "📊 Análise de Sensibilidade",
+        "subtitle": "Explore como mudanças nos parâmetros (<b>Coeficientes da Função Objetivo</b> e <b>Valores do Lado Direito</b>) afetam a solução ótima e a viabilidade do problema.",
+        "func_obj": "#### 📝 **Função Objetivo**",
+        "btn_analyze": "🔎 **Gerar Relatório de Sensibilidade**",
+        "error_optimal": "❌ O problema não possui solução ótima finita. Não é possível realizar análise de sensibilidade.",
+        "success_gen": "✅ **Análise Gerada com Sucesso!**",
+        "tip": "💡 **Dica:** O Preço Sombra de uma restrição indica o 'gargalo' do sistema. Restrições com Preço Sombra > 0 são ativas (esgotadas).",
+        "results": {
+            "obj_coefs": "1. Sensibilidade dos Coeficientes da Função Objetivo ($c_j$)",
+            "obj_desc": "Analisa o quanto o lucro (ou custo) unitário de cada variável pode mudar sem que a **base ótima** se altere.\n- **Status**: Se a variável está na Base (produzida) ou Não-Básica (não vale a pena produzir).\n- **Custo Reduzido**: Quanto o lucro deve aumentar para a variável entrar na base (para não-básicas).",
+            "rhs_sens": "2. Sensibilidade das Restrições (RHS $b_i$)",
+            "rhs_desc": "Analisa o valor marginal (Preço Sombra) de cada recurso e os limites de disponibilidade.\n- **Preço Sombra**: Quanto a função objetivo melhora se aumentarmos 1 unidade deste recurso.\n- **Intervalo**: Faixa onde o preço sombra permanece válido (base viável)."
+        },
+        "table": {
+            "var": "Variável",
+            "current": "Valor Atual",
+            "min": "Min Permitido",
+            "max": "Max Permitido",
+            "status": "Status",
+            "restriction": "Restrição",
+            "shadow_price": "Preço Sombra"
+        }
+    },
+    "standard": {
+        "title": "📝 Conversor para Forma Padrão",
+        "subtitle": "Transforme problemas de Programação Linear para a <b>Forma Padrão</b>:",
+        "subtitle_details": "<i>(Maximização, Restrições de Igualdade e RHS não-negativo)</i>",
+        "btn_convert": "🔄 **Converter para Forma Padrão**",
+        "details": "ℹ️ **Detalhes da Conversão**",
+        "original": "1. Formulação Original",
+        "standard": "2. Forma Padrão",
+        "subject_to": "**Sujeito a:**",
+        "footer": "ℹ️ A Forma Padrão é pré-requisito para aplicação do algoritmo Simplex, convertendo todas as desigualdades em igualdades através de variáveis auxiliares.",
+        "msg": {
+            "min_to_max": "⚠️ **Objetivo:** Minimização convertida para Maximização ($Max \\ W = -Z$). Invertidos sinais da função objetivo.",
+            "rhs_neg": "⚠️ **R{0}:** RHS negativo. Multiplicada por -1 e sinal invertido.",
+            "rhs_neg_simple": "⚠️ **R{0}:** RHS negativo. Multiplicada por -1.",
+            "slack": "ℹ️ **R{0}:** Restrição $\\le$. Adicionada variável de folga ${1}$.",
+            "surplus": "ℹ️ **R{0}:** Restrição $\\ge$. Adicionada variável de excesso ${1}$."
+        }
+    },
+    "library": {
+        "title": "📚 Biblioteca de Problemas Clássicos",
+        "subtitle": "Explore problemas clássicos da Pesquisa Operacional. <br>Selecione um problema para carregar seus dados automaticamente no solver apropriado.",
+        "btn_load": "🚀 Carregar",
+        "description": "**Descrição:**",
+        "math_model": "**Modelagem Matemática:**",
+        "toast_loaded": "Problema '{0}' carregado! Redirecionando...",
+        "subject_to": "Sujeito a:",
+        "problems": [
+            {
+                "title": "🏭 Mix de Produção (Manufatura)",
+                "category": "Programação Linear (Simplex)",
+                "desc": "Uma fábrica produz dois produtos: **P1** e **P2**.\n\n**Dados:**\n- **Lucro P1:** $100/unidade\n- **Lucro P2:** $150/unidade\n\n**Restrições de Recursos:**\n1. **Tempo de Máquina:** P1 gasta 2h, P2 gasta 3h. Disponível: 120h.\n2. **Matéria-prima:** P1 gasta 1kg, P2 gasta 0.5kg. Disponível: 50kg.\n\n**Objetivo:** Maximizar o lucro total."
+            },
+            {
+                "title": "🥗 Problema da Dieta (Nutrição)",
+                "category": "Programação Linear (Simplex)",
+                "desc": "Planejar uma dieta com dois alimentos (**A** e **B**) para atingir requisitos nutricionais com o **menor custo**.\n\n**Dados:**\n- **Custo A:** $2.00\n- **Custo B:** $3.00\n\n**Requisitos:**\n1. **Proteína:** A tem 4g, B tem 2g. Mínimo necessário: 20g.\n2. **Vitamina:** A tem 2mg, B tem 5mg. Mínimo necessário: 30mg.\n\n**Objetivo:** Minimizar o custo total."
+            },
+            {
+                "title": "🎒 Problema da Mochila (Knapsack)",
+                "category": "Programação Inteira (Branch & Bound)",
+                "desc": "Você tem uma mochila com capacidade de **15kg** e deve escolher quais itens levar para maximizar o valor, sem exceder o peso.\n\n**Itens Disponíveis:**\n1. **Item 1:** Valor $10, Peso 2kg\n2. **Item 2:** Valor $15, Peso 4kg\n3. **Item 3:** Valor $20, Peso 6kg\n4. **Item 4:** Valor $25, Peso 9kg\n\n**Objetivo:** Maximizar valor total (variáveis binárias/inteiras)."
+            },
+            {
+                "title": "🪵 Corte de Estoque (Simplificado)",
+                "category": "Programação Inteira (Branch & Bound)",
+                "desc": "Uma marcenaria vende rolos de tecido de 10m. Um cliente pede:\n- 3 pedaços de 3m\n- 2 pedaços de 4m\n\n**Neste exemplo didático:**\nMaximizar o lucro escolhendo quantos produtos de cada tipo produzir com recursos limitados e indivisíveis.\n\n**Objetivo:** Maximizar Z = 5x1 + 8x2\nSujeito a:\nx1 + x2 <= 6\n5x1 + 9x2 <= 45\nx1, x2 inteiros >= 0"
+            },
+            {
+                "title": "💎 Poliedro Distorcido (3D Visual)",
+                "category": "Programação Linear (Simplex)",
+                "desc": "Problema projetado para gerar uma **região factível tridimensional complexa**.\nIdeal para testar a visualização 3D, rotação e identificação de vértices.\n\n**Restrições Geométricas:**\nMúltiplos cortes em diferentes ângulos para formar um poliedro irregular (similar a um cristal lapidado).\n\n**Objetivo:** Maximizar soma das variáveis."
+            }
+        ]
+    },
+    "history": {
+        "title": "🕑 Histórico de Problemas",
+        "btn_export": "⬇️ Baixar Histórico (JSON)",
+        "import_expander": "📤 Importar (Upload)",
+        "import_label": "Selecione arquivo JSON",
+        "import_success": "✅ {0} itens importados!",
+        "import_error_fmt": "Formato inválido.",
+        "import_error": "Erro: {0}",
+        "empty": "📝 Nenhum problema resolvido nesta sessão.",
+        "method": "**Método:** {0}",
+        "dimensions": "**Dimensões:**\n- {0} Variáveis\n- {1} Restrições",
+        "objective": "**Objetivo:** {0}",
+        "math_model": "**Modelagem Matemática:**",
+        "btn_restore": "🔄 Restaurar Problema",
+        "toast_restored": "Problema #{0} carregado! Redirecionando..."
+    },
+    "common": {
+        "restriction": "Restrição",
+        "value": "Valor",
+        "type": "Tipo",
+        "obj_max": "Função Objetivo (Maximização)",
+        "obj_min": "Função Objetivo (Minimização)",
+        "error": "❌ Erro"
+    }
+}

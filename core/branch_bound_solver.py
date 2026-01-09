@@ -54,7 +54,10 @@ class BranchBoundSolver:
         root_simplex = SimplexSolver()
         root_simplex.solve(self.c, self.A, self.b, maximize=True)
         if not root_simplex.optimal or root_simplex.unbounded:
-            self.steps.append("Problema relaxado sem solução ótima ou ilimitado.")
+            self.steps.append({
+                "key": "bab.log.relaxed_infeasible",
+                "params": []
+            })
             self.finished = True
             return
 
@@ -69,7 +72,10 @@ class BranchBoundSolver:
         )
         if self._is_int(root_sol, self.integer_vars):
             self.best_solution, self.best_value = root_sol, root_val
-            self.steps.append("Solução inteira já na raiz.")
+            self.steps.append({
+                "key": "bab.log.integer_root",
+                "params": []
+            })
             self.finished = True
             return
 
@@ -109,7 +115,10 @@ class BranchBoundSolver:
             return True
 
         x_val = node["solution"][frac_idx]
-        self.steps.append(f"Branch em x{frac_idx+1} = {x_val:.3f}")
+        self.steps.append({
+            "key": "bab.log.branch",
+            "params": [frac_idx+1, x_val]
+        })
 
         for op, bound in (("<=", math.floor(x_val)), (">=", math.ceil(x_val))):
             new_bounds = deepcopy(node["bounds"])
@@ -120,7 +129,10 @@ class BranchBoundSolver:
             relax.solve(self.c, sub_A, sub_b, maximize=True)
 
             if not relax.optimal or relax.unbounded:
-                self.steps.append(f"Sub‑infeasível x{frac_idx+1} {op} {bound}")
+                self.steps.append({
+                    "key": "bab.log.sub_infeasible",
+                    "params": [frac_idx+1, op, bound]
+                })
                 self._add_node(
                     node_id=self.next_id,
                     parent=current_id,
@@ -148,7 +160,10 @@ class BranchBoundSolver:
             # actualização da melhor solução inteira
             if new_node["integer_feasible"] and sub_val > self.best_value:
                 self.best_solution, self.best_value = sub_sol, sub_val
-                self.steps.append(f"🎯 Melhor inteira atualizada: Z = {sub_val:.3f}")
+                self.steps.append({
+                    "key": "bab.log.update_best",
+                    "params": [sub_val]
+                })
             # Enfileira nós fracionários promissores
             elif not new_node["integer_feasible"] and sub_val > self.best_value:
                 self.queue.append(self.next_id)

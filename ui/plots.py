@@ -1,5 +1,6 @@
 from itertools import combinations
 from typing import List, Tuple, Optional
+from ui.lang import t
 
 import numpy as np
 import plotly.graph_objects as go
@@ -90,7 +91,7 @@ def feasible_region_2d(c: List[float], A: List[List[float]], b: List[float], opt
     # Preenchimento
     fig.add_trace(go.Scatter(
         x=x_plot, y=y_plot, fill="toself", 
-        mode="lines+markers", name="Região Factível",
+        mode="lines+markers", name=t("tableau.results.feasible_region"),
         line=dict(color='rgba(0, 100, 255, 0.8)', width=2),
         fillcolor='rgba(0, 100, 255, 0.2)',
         marker=dict(size=8, color='blue')
@@ -147,7 +148,6 @@ def feasible_region_2d(c: List[float], A: List[List[float]], b: List[float], opt
         ))
 
     fig.update_layout(
-        title="Visualização 2D da Região Factível",
         xaxis_title="x₁", yaxis_title="x₂",
         showlegend=True, template="plotly_white", height=600
     )
@@ -175,7 +175,7 @@ def feasible_region_3d(c: List[float], A: List[List[float]], b: List[float], opt
             intensity=z, # Colorir baseado na altura Z para dar noção de 3D
             colorscale='Spectral_r', # Cor mais rica
             opacity=0.7,
-            name='Região Factível',
+            name=t("tableau.results.feasible_region"),
             flatshading=True,
             showscale=False,
             lighting=dict(ambient=0.4, diffuse=0.5, roughness=0.1, specular=1.0, fresnel=1.0)
@@ -230,7 +230,6 @@ def feasible_region_3d(c: List[float], A: List[List[float]], b: List[float], opt
         ))
 
     fig.update_layout(
-        title="Visualização 3D da Região Factível",
         scene=dict(xaxis_title='x₁', yaxis_title='x₂', zaxis_title='x₃'),
         height=700
     )

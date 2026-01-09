@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 import numpy as np
+from ui.lang import t
 
 
 def show_tableau(T, caption="", pivot: tuple[int, int] | None = None, basis_vars=None, show_legend=True):
@@ -80,11 +81,11 @@ def show_tableau(T, caption="", pivot: tuple[int, int] | None = None, basis_vars
     
     # Adicionar legenda explicativa se houver pivot
     if show_legend and pivot and pivot != (-1, -1):
-        st.markdown("""
-        **Legenda:**
-        - 🟨 **Amarelo Forte**: Elemento pivot
-        - 🟡 **Amarelo Claro**: Linha e coluna do pivot
-        - 🔵 **Azul Claro**: Linha da função objetivo (Z)
+        st.markdown(f"""
+        {t("tableau.legend_title")}
+        - {t("tableau.legend_pivot")}
+        - {t("tableau.legend_row_col")}
+        - {t("tableau.legend_obj")}
         """)
 
 
@@ -105,14 +106,14 @@ def show_tableau_with_basis_info(T, basis_vars=None, caption="", pivot=None, sho
     # Mostrar informações da base se fornecidas
     if basis_vars:
         st.markdown("---")
-        st.markdown("#### 📋 **Status da Base Atual**")
+        st.markdown(t("tableau.status_basis"))
         
         # Separar variáveis básicas com valor significativo
         significant_vars = [(name, val) for name, val in basis_vars if abs(val) > 1e-6]
         zero_vars = [(name, val) for name, val in basis_vars if abs(val) <= 1e-6]
         
         if significant_vars:
-            st.markdown("**Variáveis Básicas (≠ 0):**")
+            st.markdown(t("tableau.basic_vars_nz"))
             cols = st.columns(min(len(significant_vars), 4))
             for i, (var_name, value) in enumerate(significant_vars):
                 with cols[i % len(cols)]:
@@ -123,7 +124,7 @@ def show_tableau_with_basis_info(T, basis_vars=None, caption="", pivot=None, sho
         
         if zero_vars:
             zero_names = [name for name, _ in zero_vars]
-            st.markdown(f"**Variáveis Básicas (= 0):** {', '.join(zero_names)}")
+            st.markdown(f"{t('tableau.basic_vars_z')} {', '.join(zero_names)}")
 
 
 def extract_basis_variables(T, current_basis, n_original_vars):
@@ -166,25 +167,25 @@ def create_iteration_summary(iteration_num, entering_var, leaving_var, pivot_ele
         pivot_element: Valor do elemento pivot
         ratios_info: Lista de informações sobre as razões
     """
-    st.markdown(f"### 🔄 Resumo da Iteração {iteration_num}")
+    st.markdown(t("tableau.iter_summary").format(iteration_num))
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown("**🔴 Variável que Sai**")
+        st.markdown(t("tableau.var_out"))
         st.info(leaving_var)
     
     with col2:
-        st.markdown("**⚡ Elemento Pivot**")
+        st.markdown(t("tableau.pivot_elem"))
         st.warning(f"{pivot_element:.3f}")
     
     with col3:
-        st.markdown("**🟢 Variável que Entra**")
+        st.markdown(t("tableau.var_in"))
         st.success(entering_var)
     
     # Mostrar informações das razões diretamente (sem expander aninhado)
     if ratios_info:
-        st.markdown("**📊 Detalhes do Teste da Razão:**")
+        st.markdown(t("tableau.ratio_details"))
         for ratio_info in ratios_info:
             st.write(f"• {ratio_info}")
 
@@ -205,20 +206,21 @@ def show_final_solution(solution, objective_value, basis_info=None, maximize=Tru
     col1, col2, col3 = st.columns(3)
     
     with col1:
+        label = t("tableau.val_max") if maximize else t("tableau.val_min")
         st.metric(
-            label=f"**Valor {'Máximo' if maximize else 'Mínimo'} (Z)**",
+            label=label,
             value=f"{objective_value:.3f}",
             delta=None
         )
         
     with col2:
-        st.metric(label="**Método**", value=method)
+        st.metric(label=t("tableau.method"), value=method)
         
     with col3:
-        st.metric(label="**Iterações**", value=str(iterations))
+        st.metric(label=t("tableau.iterations"), value=str(iterations))
         
     # Valores das variáveis
-    st.markdown("### 📊 Valores das Variáveis")
+    st.markdown(t("tableau.val_vars"))
     
     # Organizar em colunas para melhor visualização
     n_vars = len(solution)
@@ -248,26 +250,27 @@ def show_optimization_summary(method="Simplex", iterations=0, status="Optimal"):
         iterations: Número de iterações realizadas
         status: Status final (Optimal, Unbounded, Infeasible, etc.)
     """
-    st.markdown("### 📈 Resumo da Otimização")
+    st.markdown(t("tableau.opt_summary"))
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.metric("**Método**", method)
+        st.metric(t("tableau.method"), method)
     
     with col2:
-        st.metric("**Iterações**", iterations)
+        st.metric(t("tableau.iterations"), iterations)
     
     with col3:
         # Escolher cor baseada no status
+        status_text = t("tableau.status").format(status)
         if status == "Optimal":
-            st.success(f"**Status:** {status}")
+            st.success(status_text)
         elif status == "Unbounded":
-            st.error(f"**Status:** {status}")
+            st.error(status_text)
         elif status == "Infeasible":
-            st.warning(f"**Status:** {status}")
+            st.warning(status_text)
         else:
-            st.info(f"**Status:** {status}")
+            st.info(status_text)
 
 
 def analyze_tableau_basis(T, n_original_vars):
@@ -314,26 +317,19 @@ def analyze_tableau_basis(T, n_original_vars):
 def format_tableau_description(iteration_num, entering_var, leaving_var, ratios):
     """
     Formata a descrição de uma iteração do Simplex com markdown estruturado.
-    
-    Args:
-        iteration_num: Número da iteração
-        entering_var: Variável que entra
-        leaving_var: Variável que sai
-        ratios: Lista de razões calculadas
-    
-    Returns:
-        String formatada em markdown
+    Esta função parece não ser usada pelo novo sistema de logs (simplex_solver.py emite dicts),
+    mas mantemos por compatibilidade ou refatoramos se necessário.
     """
     description = f"""
-## 🔄 **ITERAÇÃO {iteration_num}**
+## 🔄 {t("tableau.iteration_title").format(iteration_num)}
 
-### 1️⃣ **Seleção da Variável que Entra**
-• **Critério:** Custo reduzido mais negativo
-• **Variável escolhida:** **{entering_var}**
+### 1️⃣ {t("tableau.entering_var_selection_title")}
+• {t("tableau.entering_var_criterion")}
+• {t("tableau.entering_var_chosen").format(entering_var)}
 
-### 2️⃣ **Teste da Razão Mínima**
-• **Objetivo:** Determinar qual variável sai da base
-• **Razões calculadas:**
+### 2️⃣ {t("tableau.min_ratio_test_title")}
+• {t("tableau.min_ratio_test_objective")}
+• {t("tableau.min_ratio_test_calculated")}
 """
     
     for i, ratio in enumerate(ratios):

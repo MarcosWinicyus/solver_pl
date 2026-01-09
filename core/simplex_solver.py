@@ -187,16 +187,19 @@ class SimplexSolver:
                 
         # Log Inicial
         basis_vars_names = [self._variable_names[i] for i in basis]
-        initial_desc = (
-            f"**Tableau Inicial (Método Big-M):**\n\n"
-            f"• **Variáveis:** {', '.join(self._variable_names)}\n"
-            f"• **Base Inicial:** {', '.join(basis_vars_names)}\n"
-            f"• **Penalidade M:** {M}\n\n"
-            f"**Ajustes Realizados:**\n"
-            f"• Restrições com RHS negativo foram convertidas.\n"
-            f"• Variáveis artificiais adicionadas onde necessário."
-        )
-        self._log_state(T, "Início Big-M", initial_desc, (-1, -1))
+        var_names_str = ", ".join(self._variable_names)
+        basis_str = ", ".join(basis_vars_names)
+        
+        step_dict = {
+            "key": "simplex.log.init_bigm",
+            "params": []
+        }
+        
+        desc_dict = {
+            "key": "simplex.log.init_bigm_desc",
+            "params": [var_names_str, basis_str, M]
+        }
+        self._log_state(T, step_dict, desc_dict, (-1, -1))
         
         # Salvar estado para step-by-step
         self.T = T
@@ -269,30 +272,57 @@ class SimplexSolver:
         entering = self._variable_names[pc]
         leaving = self._variable_names[self._current_basis[pr-1]]
         
-        desc = (
-            f"## 🔄 ITERAÇÃO {it}\n\n"
-            f"• **Entra:** {entering} (Custo reduzido: {T[0, pc]:.2f})\n"
-            f"• **Sai:** {leaving}\n"
-            f"• **Pivot:** Linha {pr}, Coluna {pc+1}"
-        )
-        self._log_state(T, f"Iteração {it}", desc, (pr, pc))
+        step_dict = {
+            "key": "simplex.log.iteration",
+            "params": [it]
+        }
+        
+        desc_dict = {
+            "key": "simplex.log.iteration_desc",
+            "params": [it, entering, T[0, pc], leaving, pr, pc+1]
+        }
+        
+        self._log_state(T, step_dict, desc_dict, (pr, pc))
 
     def _log_success(self, T):
         basis_names = [self._variable_names[i] for i in self._current_basis]
-        desc = (
-            f"## ✅ SOLUÇÃO ÓTIMA!\n\n"
-            f"**Base Final:** {', '.join(basis_names)}\n"
-            f"**Valor da Função Objetivo:** {abs(T[0, -1]):.4f}"
-        )
-        self._log_state(T, "Ótimo Encontrado", desc, (-1, -1))
+        basis_str = ", ".join(basis_names)
+        
+        step_dict = {
+            "key": "simplex.log.optimal",
+            "params": []
+        }
+        
+        desc_dict = {
+            "key": "simplex.log.optimal_desc",
+            "params": [basis_str, abs(T[0, -1])]
+        }
+        self._log_state(T, step_dict, desc_dict, (-1, -1))
 
     def _log_unbounded(self, T, pc):
         var = self._variable_names[pc]
-        desc = f"## ❌ ILIMITADO\n\nA variável **{var}** pode crescer indefinidamente."
-        self._log_state(T, "Ilimitado", desc, (-1, -1))
+        
+        step_dict = {
+            "key": "simplex.log.unbounded",
+            "params": []
+        }
+        
+        desc_dict = {
+            "key": "simplex.log.unbounded_desc",
+            "params": [var]
+        }
+        self._log_state(T, step_dict, desc_dict, (-1, -1))
         
     def _log_timeout(self, T, limit):
-        self._log_state(T, "Timeout", f"Limite de {limit} iterações atingido.", (-1, -1))
+        step_dict = {
+            "key": "simplex.log.timeout",
+            "params": []
+        }
+        desc_dict = {
+            "key": "simplex.log.timeout_desc",
+            "params": [limit]
+        }
+        self._log_state(T, step_dict, desc_dict, (-1, -1))
 
     def _log_state(self, tableau, step, decision, pivot):
         self.tableaux.append(tableau.copy())
@@ -307,6 +337,17 @@ class SimplexSolver:
                 if T[i+1, -1] > 1e-6:
                     return True
         return False
+        
+    def _log_infeasible(self, T):
+        step_dict = {
+            "key": "simplex.log.infeasible",
+            "params": []
+        }
+        desc_dict = {
+            "key": "simplex.log.infeasible_desc",
+            "params": []
+        }
+        self._log_state(T, step_dict, desc_dict, (-1, -1))
 
     @staticmethod
     def _is_optimal(T):

@@ -1,9 +1,10 @@
 import streamlit as st
 import json
 from typing import Dict, Any
+from ui.lang import t
 
 def history_page():
-    st.markdown("<h1 style='text-align: center;'>🕑 Histórico de Problemas</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: center;'>{t('history.title')}</h1>", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
     # --- Ações (Top Bar) ---
@@ -13,35 +14,35 @@ def history_page():
         # Exportar
         history = st.session_state.get("history", [])
         st.download_button(
-            label="⬇️ Baixar Histórico (JSON)",
+            label=t("history.btn_export"),
             data=json.dumps(history, indent=2),
             file_name="historico_otimizacao.json",
             mime="application/json",
-            use_container_width=True,
+            width="stretch",
             disabled=len(history) == 0
         )
 
     with col_act2:
         # Importar (dentro de um popover/expander discreto)
-        with st.expander("📤 Importar (Upload)"):
-            uploaded_file = st.file_uploader("Selecione arquivo JSON", type=["json"], label_visibility="collapsed")
+        with st.expander(t("history.import_expander")):
+            uploaded_file = st.file_uploader(t("history.import_label"), type=["json"], label_visibility="collapsed")
             if uploaded_file is not None:
                 try:
                     data = json.load(uploaded_file)
                     if isinstance(data, list):
                         st.session_state.setdefault("history", []).extend(data)
-                        st.toast(f"✅ {len(data)} itens importados!", icon="📥")
+                        st.toast(t("history.import_success").format(len(data)), icon="📥")
                         st.rerun() # Refresh imediato
                     else:
-                        st.error("Formato inválido.")
+                        st.error(t("history.import_error_fmt"))
                 except Exception as e:
-                    st.error(f"Erro: {e}")
+                    st.error(t("history.import_error").format(e))
 
     st.markdown("<br>", unsafe_allow_html=True)
 
     # --- Listagem de Histórico ---
     if not history:
-        st.info("📝 Nenhum problema resolvido nesta sessão.")
+        st.info(t("history.empty"))
         return
 
     # CSS para alinhar botão
@@ -67,17 +68,18 @@ def history_page():
              
              with col_main:
                  with st.expander(f"{icon} Problema #{real_idx + 1} — Z = {z_str}"):
-                     st.caption(f"**Método:** {method}")
+                     st.caption(t("history.method").format(method))
                      
                      c_desc, c_json = st.columns(2)
                      with c_desc:
                          n_vars = len(item.get("c", []))
                          n_cons = len(item.get("A", []))
-                         st.markdown(f"**Dimensões:**\n- {n_vars} Variáveis\n- {n_cons} Restrições")
-                         st.markdown(f"**Objetivo:** {'Maximizar' if item.get('maximize', True) else 'Minimizar'}")
+                         st.markdown(t("history.dimensions").format(n_vars, n_cons))
+                         obj_txt = t("simplex.maximize") if item.get('maximize', True) else t("simplex.minimize")
+                         st.markdown(t("history.objective").format(obj_txt))
                      
                      with c_json:
-                         st.markdown("**Modelagem Matemática:**")
+                         st.markdown(t("history.math_model"))
                          
                          # Extrair dados
                          c = item.get("c", [])
@@ -90,7 +92,7 @@ def history_page():
                          st.latex(f"{'Max' if is_max else 'Min'} \ Z = {obj_str}")
                          
                          # Restrições
-                         st.markdown("Sujeito a:")
+                         st.markdown(t("library.subject_to"))
                          for r_idx, row in enumerate(A):
                              lhs = " + ".join([f"{val}x_{j+1}" for j, val in enumerate(row)])
                              rhs = b[r_idx]
@@ -99,12 +101,13 @@ def history_page():
                              # O histórico simples atual salva A já convertido? 
                              # O SimplexSolver salva A original se passado, mas aqui salvamos "c", "A", "b" dict.
                              # Vamos assumir <= para visualização histórica básica ou usar genericamente
+                             # TODO: Salvar tipos de restrição no histórico
                              st.latex(f"{lhs} \le {rhs}")
                          
                          st.latex("x_j \ge 0")
 
              with col_btn:
-                 if st.button("🔄 Carregar", key=f"load_hist_{real_idx}", help=f"Restaurar Problema #{real_idx + 1}"):
+                 if st.button(t("history.btn_restore"), key=f"load_hist_{real_idx}", help=f"Restaurar Problema #{real_idx + 1}"):
                      _load_history_item(item)
         
         # Espaçamento leve entre itens (sem divider)
@@ -124,12 +127,12 @@ def _load_history_item(item: Dict[str, Any]):
     
     st.session_state["problem"] = problem_data
     
-    # Determinar página alvo
-    target = "📐 Método Simplex"
-    if "Branch" in item.get("method", ""):
-        target = "🌳 Branch & Bound"
+    # Determinar página alvo (Internal keys)
+    target = "simplex"
+    if "Branch" in item.get("method", "") or "B&B" in item.get("method", ""):
+        target = "bab"
         
     st.session_state["pending_redirect"] = target
     
-    st.toast(f"Problema #{item.get('method')} carregado! Redirecionando...", icon="🚀")
+    st.toast(t("history.toast_restored").format(item.get('method')), icon="🚀")
     st.rerun()

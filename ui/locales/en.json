@@ -1,0 +1,290 @@
+{
+    "menu": {
+        "home": "Home",
+        "simplex": "Simplex",
+        "bab": "Branch & Bound",
+        "duality": "Duality (Primal-Dual)",
+        "sensitivity": "Sensitivity Analysis",
+        "std_form": "Standard Form",
+        "library": "Problem Library",
+        "history": "Session History",
+        "principal": "Main",
+        "solvers": "Solvers",
+        "tools": "Tools"
+    },
+    "tableau": {
+        "legend_title": "**Legend:**",
+        "legend_pivot": "🟨 **Dark Yellow**: Pivot Element",
+        "legend_row_col": "🟡 **Light Yellow**: Pivot Row/Column",
+        "legend_obj": "🔵 **Light Blue**: Objective Function Row (Z)",
+        "status_basis": "#### 📋 **Current Basis Status**",
+        "basic_vars_nz": "**Basic Variables (≠ 0):**",
+        "basic_vars_z": "**Basic Variables (= 0):**",
+        "iter_summary": "### 🔄 Iteration {0} Summary",
+        "var_out": "**🔴 Leaves Basis**",
+        "pivot_elem": "**⚡ Pivot Element**",
+        "var_in": "**🟢 Enters Basis**",
+        "ratio_details": "**📊 Ratio Test Details:**",
+        "opt_summary": "### 📈 Optimization Summary",
+        "val_vars": "### 📊 Variable Values",
+        "val_max": "**Maximum Value (Z)**",
+        "val_min": "**Minimum Value (Z)**",
+        "method": "**Method**",
+        "iterations": "**Iterations**",
+        "status": "**Status:** {0}"
+    },
+    "home": {
+        "title": "PL Solver",
+        "subtitle": "Didactic Platform for Linear and Integer Optimization",
+        "simplex_title": "📐 Simplex",
+        "simplex_desc": "Step-by-step resolution with interactive <b>3D/2D visualization</b>, tableau analysis, and multiple iterations.",
+        "bab_title": "🌳 Branch & Bound",
+        "bab_desc": "Algorithm for integer problems (IP) with interactive decision tree and depth/breadth search strategies.",
+        "duality_title": "🔄 Duality",
+        "duality_desc": "Instantly convert Primal Problems to Duals and switch between resolution modes.",
+        "sensitivity_title": "📊 Sensitivity",
+        "sensitivity_desc": "Analyze shadow prices, reduced costs, and stability intervals for objective function and constraint parameters.",
+        "std_form_title": "📝 Standard Form",
+        "std_form_desc": "Convert any LP to canonical format with slack/surplus variables and side-by-side comparison.",
+        "library_title": "📚 Library",
+        "library_desc": "Collection of classic problems (Diet, Knapsack, Production Mix) ready to load and test.",
+        "history_title": "🕑 History",
+        "history_desc": "Your sessions are saved automatically. Recover, export, or review previous problems.",
+        "multilang_title": "🌐 Multi-Language",
+        "multilang_desc": "Full i18n support via JSON. Easily contribute by adding new translation files."
+    },
+    "simplex": {
+        "title": "📐 Simplex Method - Tableau",
+        "n_vars": "🔢 **Number of Variables**",
+        "n_cons": "📏 **Number of Constraints**",
+        "obj_type": "🎯 Optimization Type:",
+        "obj_func": "📝 **Objective Function Coefficients**",
+        "constraints": "📋 **Problem Constraints**",
+        "btn_solve": "🚀 **Solve Problem**",
+        "didactic": "🎓 **Didactic Mode**",
+        "step_by_step": "👣 **Step-by-Step**",
+        "maximize": "🔺 Maximize",
+        "minimize": "🔻 Minimize",
+        "vars_help": "Number of decision variables",
+        "cons_help": "Number of problem constraints",
+        "obj_help": "Optimization type regarding Z value",
+        "coef_help": "Coefficient of variable",
+        "rhs_label": "**Value**",
+        "type_label": "**Type**",
+        "results": {
+            "unbounded": "⚠️ **Unbounded Problem** - The objective function grows infinitely",
+            "infeasible": "❌ **No optimal solution found** (Infeasible)",
+            "optimal_found": "🎉 **Optimal Solution Found!**",
+            "iterations_title": "### 📊 **Simplex Algorithm Iterations**",
+            "next_step": "⏭️ **Next Step**",
+            "pivot_summary": "#### 🔄 **Pivot Operation Summary**",
+            "enters_basis": "**🟢 Enters Basis:**",
+            "leaves_basis": "**🔴 Leaves Basis:**",
+            "pivot_element": "**⚡ Pivot Element:**",
+            "tech_details": "#### 📋 **Technical Details**",
+            "pivot_pos": "**Pivot Position:**",
+            "ops_performed": "**Performed Operations:**",
+            "basis_analysis": "#### 📊 **Current Basis Analysis**",
+            "interpretation": "**💡 Interpretation:**",
+            "active_vars": "• **Active decision variables:**",
+            "slack_vars": "• **Available slacks:**",
+            "non_basic": "• **Non-basic variables (= 0):**",
+            "applied_row": "**Applied Row:**",
+            "plot_title_2d": "2D Feasible Region Visualization",
+            "plot_title_3d": "3D Feasible Region Visualization",
+            "feasible_region": "Feasible Region",
+            "plot_2d": "### 📈 **Feasible Region Visualization (2D)**",
+            "plot_3d": "### 🧊 **Feasible Region Visualization (3D)**",
+            "details": {
+                "line": "- Row: {0}",
+                "col": "- Column: {0}",
+                "val": "- Value: {0:.6f}",
+                "op_div": "- ✅ Row {0} ÷ {1:.3f}",
+                "op_elim": "- ✅ Eliminate column {0}",
+                "op_update": "- ✅ Update basis"
+            }
+        },
+        "log": {
+            "init_bigm": "Big-M Start",
+            "init_bigm_desc": "**Initial Tableau (Big-M Method):**\n\n• **Variables:** {0}\n• **Initial Basis:** {1}\n• **Penalty M:** {2}\n\n**Adjustments Made:**\n• Constraints with negative RHS were converted.\n• Artificial variables added where necessary.",
+            "infeasible": "Infeasible",
+            "infeasible_desc": "## ❌ INFEASIBLE PROBLEM\n\nThe algorithm converged, but artificial variables remain in the basis with positive value.\nThis indicates no solution satisfies all constraints.",
+            "optimal": "Optimal Found",
+            "optimal_desc": "## ✅ OPTIMAL SOLUTION!\n\n**Final Basis:** {0}\n**Objective Function Value:** {1:.4f}",
+            "unbounded": "Unbounded",
+            "unbounded_desc": "## ❌ UNBOUNDED\n\nVariable **{0}** can grow indefinitely.",
+            "timeout": "Timeout",
+            "timeout_desc": "Iteration limit of {0} reached.",
+            "iteration": "Iteration {0}",
+            "iteration_desc": "## 🔄 ITERATION {0}\n\n• **Enters:** {1} (Reduced Cost: {2:.2f})\n• **Leaves:** {3}\n• **Pivot:** Row {4}, Column {5}"
+        }
+    },
+    "bab": {
+        "title": "🌳 Branch & Bound",
+        "subtitle": "Integer Linear Programming Resolution",
+        "int_vars": "### 🔢 **Integer Variables**",
+        "int_vars_help": "Select which variables must have integer values",
+        "chk_int": "is integer",
+        "strategy": "🔍 **Search Strategy**",
+        "strat_help": "Choose how the algorithm explores the tree.\n\nBFS: Breadth-first.\nDFS: Depth-first.\nBestBound: Highest Z first.",
+        "strats": {
+            "BFS": "Breadth-First Search (BFS)",
+            "DFS": "Depth-First Search (DFS)",
+            "BestBound": "Best Bound Search"
+        },
+        "btn_start": "🚀 **Start**",
+        "btn_next": "⏭️ **Next Step**",
+        "legend": "🏷️ **Legend**",
+        "messages": {
+            "init": "🔄 Initializing problem...",
+            "solving": "🔄 Solving integer problem...",
+            "error": "❌ **Error during resolution:**",
+            "no_int_sol": "❌ **No integer solution found**",
+            "no_int_bg": "This might indicate the problem is infeasible or no integer solutions exist.",
+            "root_error": "❌ **Could not start Branch & Bound**",
+            "root_details": "The relaxed problem (at root) could not be solved. Possible causes:\n- **Infeasibility**: Conflicting constraints.\n- **Unbounded**: Objective function tends to infinity (check Max/Min selection)."
+        },
+        "results": {
+            "best_z": "**Current/Final Best Z**",
+            "nodes_exp": "**Nodes Explored**",
+            "nodes_queue": "**Nodes in Queue**",
+            "int_sols": "**Integer Solutions**",
+            "tree_title": "### 🌳 **Branch & Bound Tree**",
+            "log_title": "📝 **Step Log**",
+            "best_int_sol": "### 📊 **Best Integer Solution**",
+            "legend_info": "ℹ️ Click on a node to see details.",
+            "legend_items": "\n                - 🟢 **Green (Optimal)**: Best integer solution.\n                - 🟣 **Purple (Integer)**: Feasible integer solution (sub-optimal).\n                - 🔴 **Red (Infeasible)**: No solution.\n                - ⚪ **Gray (Pruned)**: Bound worse than incumbent.\n                - 🔵 **Blue (Relaxation)**: Fractional solution.\n                - 🟡 **Yellow (Root)**: Initial node.\n                "
+        },
+        "log": {
+            "relaxed_infeasible": "Relaxed problem has no optimal solution or is unbounded.",
+            "integer_root": "Integer solution found at root.",
+            "branch": "Branch on x{0} = {1:.3f}",
+            "sub_infeasible": "Sub-infeasible x{0} {1} {2}",
+            "update_best": "🎯 Best integer updated: Z = {0:.3f}"
+        },
+        "tree_labels": {
+            "OPTIMAL": "Optimal Solution",
+            "INTEGER": "Integer Solution",
+            "INFEASIBLE": "Infeasible",
+            "PRUNED": "Pruned by Bound",
+            "FRACTIONAL": "Relaxation",
+            "ROOT": "Root"
+        }
+    },
+    "duality": {
+        "title": "🔄 Duality (Primal-Dual Converter)",
+        "subtitle": "Tool to convert Primal problems into their Dual equivalents.",
+        "theorem": "<b>Duality Theorem:</b> Primal <b>Max</b> Z = cx (Ax ≤ b) ↔ Dual <b>Min</b> W = by (Aᵀy ≥ c)",
+        "primal_def": "1. Primal Problem Definition",
+        "btn_convert": "🔄 Convert to DUAL",
+        "result_title": "2. Resulting Dual Problem",
+        "domain": "**Variables Domain:**",
+        "solve_label": "###### Solve:",
+        "btn_solve_simplex": "📐 Solve with Simplex",
+        "btn_solve_bb": "🌳 Solve with B&B",
+        "primal": "Primal",
+        "dual": "Dual"
+    },
+    "sensitivity": {
+        "title": "📊 Sensitivity Analysis",
+        "subtitle": "Explore how parameter changes (<b>Objective Function Coefficients</b> and <b>RHS Values</b>) affect the optimal solution and feasibility.",
+        "func_obj": "#### 📝 **Objective Function**",
+        "btn_analyze": "🔎 **Generate Sensitivity Report**",
+        "error_optimal": "❌ The problem has no finite optimal solution. Sensitivity analysis cannot be performed.",
+        "success_gen": "✅ **Analysis Generated Successfully!**",
+        "tip": "💡 **Tip:** The Shadow Price of a constraint indicates the system 'bottleneck'. Constraints with Shadow Price > 0 are active (exhausted).",
+        "results": {
+            "obj_coefs": "1. Objective Function Coefficients Sensitivity ($c_j$)",
+            "obj_desc": "Analyzes how much the unit profit (or cost) of each variable can change without altering the **optimal basis**.\n- **Status**: Whether the variable is Basic (produced) or Non-Basic (not worth producing).\n- **Reduced Cost**: How much profit must increase for the variable to enter the basis (for non-basics).",
+            "rhs_sens": "2. Constraints Sensitivity (RHS $b_i$)",
+            "rhs_desc": "Analyzes the marginal value (Shadow Price) of each resource and availability limits.\n- **Shadow Price**: How much the objective function improves if we increase this resource by 1 unit.\n- **Interval**: Range where the shadow price remains valid (basis remains feasible)."
+        },
+        "table": {
+            "var": "Variable",
+            "current": "Current Value",
+            "min": "Min Allowed",
+            "max": "Max Allowed",
+            "status": "Status",
+            "restriction": "Constraint",
+            "shadow_price": "Shadow Price"
+        }
+    },
+    "standard": {
+        "title": "📝 Standard Form Converter",
+        "subtitle": "Transform Linear Programming problems into <b>Standard Form</b>:",
+        "subtitle_details": "<i>(Maximization, Equality Constraints, and Non-negative RHS)</i>",
+        "btn_convert": "🔄 **Convert to Standard Form**",
+        "details": "ℹ️ **Conversion Details**",
+        "original": "1. Original Formulation",
+        "standard": "2. Standard Form",
+        "subject_to": "**Subject to:**",
+        "footer": "ℹ️ The Standard Form is a prerequisite for the Simplex algorithm, converting all inequalities into equalities using auxiliary variables.",
+        "msg": {
+            "min_to_max": "⚠️ **Objective:** Minimization converted to Maximization ($Max \\ W = -Z$). Objective function signs inverted.",
+            "rhs_neg": "⚠️ **R{0}:** Negative RHS. Multiplied by -1 and sign inverted.",
+            "rhs_neg_simple": "⚠️ **R{0}:** Negative RHS. Multiplied by -1.",
+            "slack": "ℹ️ **R{0}:** $\\le$ Constraint. Added slack variable ${1}$.",
+            "surplus": "ℹ️ **R{0}:** $\\ge$ Constraint. Added surplus variable ${1}$."
+        }
+    },
+    "library": {
+        "title": "📚 Classical Problems Library",
+        "subtitle": "Explore classical Operations Research problems. <br>Select a problem to automatically load its data into the appropriate solver.",
+        "btn_load": "🚀 Load",
+        "description": "**Description:**",
+        "math_model": "**Mathematical Modeling:**",
+        "toast_loaded": "Problem '{0}' loaded! Redirecting...",
+        "subject_to": "Subject to:",
+        "problems": [
+            {
+                "title": "🏭 Production Mix (Manufacturing)",
+                "category": "Linear Programming (Simplex)",
+                "desc": "A factory produces two products: **P1** and **P2**.\n\n**Data:**\n- **Profit P1:** $100/unit\n- **Profit P2:** $150/unit\n\n**Resource Constraints:**\n1. **Machine Time:** P1 takes 2h, P2 takes 3h. Available: 120h.\n2. **Raw Material:** P1 takes 1kg, P2 takes 0.5kg. Available: 50kg.\n\n**Objective:** Maximize total profit."
+            },
+            {
+                "title": "🥗 Diet Problem (Nutrition)",
+                "category": "Linear Programming (Simplex)",
+                "desc": "Plan a diet with two foods (**A** and **B**) to meet nutritional requirements with the **lowest cost**.\n\n**Data:**\n- **Cost A:** $2.00\n- **Cost B:** $3.00\n\n**Requirements:**\n1. **Protein:** A has 4g, B has 2g. Minimum required: 20g.\n2. **Vitamin:** A has 2mg, B has 5mg. Minimum required: 30mg.\n\n**Objective:** Minimize total cost."
+            },
+            {
+                "title": "🎒 Knapsack Problem",
+                "category": "Integer Programming (Branch & Bound)",
+                "desc": "You have a knapsack with a capacity of **15kg** and must choose which items to take to maximize value without exceeding the weight.\n\n**Available Items:**\n1. **Item 1:** Value $10, Weight 2kg\n2. **Item 2:** Value $15, Weight 4kg\n3. **Item 3:** Value $20, Weight 6kg\n4. **Item 4:** Value $25, Weight 9kg\n\n**Objective:** Maximize total value (binary/integer variables)."
+            },
+            {
+                "title": "🪵 Cutting Stock (Simplified)",
+                "category": "Integer Programming (Branch & Bound)",
+                "desc": "A carpentry shop sells 10m fabric rolls. A customer orders:\n- 3 pieces of 3m\n- 2 pieces of 4m\n\n**In this didactic example:**\nMaximize profit by choosing how many products of each type to produce with limited and indivisible resources.\n\n**Objective:** Maximize Z = 5x1 + 8x2\nSubject to:\nx1 + x2 <= 6\n5x1 + 9x2 <= 45\nx1, x2 integers >= 0"
+            },
+            {
+                "title": "💎 Distorted Polyhedron (3D Visual)",
+                "category": "Linear Programming (Simplex)",
+                "desc": "Problem designed to generate a **complex three-dimensional feasible region**.\nIdeal for testing 3D visualization, rotation, and vertex identification.\n\n**Geometric Constraints:**\nMultiple cuts at different angles to form an irregular polyhedron (similar to a cut crystal).\n\n**Objective:** Maximize sum of variables."
+            }
+        ]
+    },
+    "history": {
+        "title": "🕑 Session History",
+        "btn_export": "⬇️ Download History (JSON)",
+        "import_expander": "📤 Import (Upload)",
+        "import_label": "Select JSON file",
+        "import_success": "✅ {0} items imported!",
+        "import_error_fmt": "Invalid format.",
+        "import_error": "Error: {0}",
+        "empty": "📝 No problems solved in this session.",
+        "method": "**Method:** {0}",
+        "dimensions": "**Dimensions:**\n- {0} Variables\n- {1} Constraints",
+        "objective": "**Objective:** {0}",
+        "math_model": "**Mathematical Modeling:**",
+        "btn_restore": "🔄 Restore Problem",
+        "toast_restored": "Problem #{0} loaded! Redirecting..."
+    },
+    "common": {
+        "restriction": "Constraint",
+        "value": "Value",
+        "type": "Type",
+        "obj_max": "Objective Function (Maximization)",
+        "obj_min": "Objective Function (Minimization)",
+        "error": "❌ Error"
+    }
+}

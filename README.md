@@ -2,75 +2,104 @@
 
 ## Sobre o Projeto
 
-O **Sistema de Otimização Visual** é uma plataforma interativa e educacional desenvolvida para auxiliar no aprendizado e resolução de problemas de Programação Linear (PL) e Programação Inteira.
+O **Sistema de Otimização Visual** (Solver PL) é uma plataforma interativa e didática desenvolvida para auxiliar no ensino e aprendizagem de Pesquisa Operacional. Ele foca na resolução e visualização de problemas de **Programação Linear (PL)** e **Programação Inteira (PLI)**.
 
-Construído com Python e Streamlit, o sistema oferece uma interface amigável para modelar, resolver e visualizar problemas de otimização, tornando conceitos complexos mais acessíveis para estudantes e profissionais.
-
-## Funcionalidades Principais
-
-### 📐 Método Simplex
-- Resolução passo a passo de problemas de Programação Linear.
-- Visualização das iterações e do Tableau Simplex.
-- Identificação de soluções ótimas, múltiplas soluções, soluções ilimitadas e problemas inviáveis.
-
-### 🌳 Branch & Bound
-- Resolução de problemas de Programação Linear Inteira.
-- Visualização da árvore de decisão do algoritmo Branch & Bound.
-- Acompanhamento das podas e ramificações para encontrar a solução inteira ótima.
-
-### 🕑 Histórico de Sessão
-- Registro automático dos problemas resolvidos durante a sessão.
-- Possibilidade de revisar resoluções anteriores.
-
-## Tecnologias Utilizadas
-
-- **[Streamlit](https://streamlit.io/)**: Framework para criação da interface web interativa.
-- **[NumPy](https://numpy.org/)**: Computação numérica e manipulação de arrays.
-- **[Pandas](https://pandas.pydata.org/)**: Estruturação e manipulação de dados.
-- **[Plotly](https://plotly.com/)**: Criação de gráficos interativos e visualizações.
-
-## Como Executar
-
-1.  **Clone o repositório**
-    ```bash
-    git clone <url-do-repositorio>
-    cd solver_pl
-    ```
-
-2.  **Crie e ative um ambiente virtual (recomendado)**
-    ```bash
-    python -m venv .venv
-    # No Windows:
-    .venv\Scripts\activate
-    # No Linux/Mac:
-    source .venv/bin/activate
-    ```
-
-3.  **Instale as dependências**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4.  **Execute a aplicação**
-    ```bash
-    streamlit run app.py
-    ```
-
-## Estrutura do Projeto
-
-- `app.py`: Ponto de entrada da aplicação e configuração principal.
-- `core/`: Contém a lógica dos algoritmos de otimização.
-    - `simplex_solver.py`: Implementação do Método Simplex.
-    - `branch_bound_solver.py`: Implementação do algoritmo Branch & Bound.
-- `ui/`: Componentes da interface do usuário.
-    - `simplex_page.py`: Interface para o solver Simplex.
-    - `branch_and_bound_page.py`: Interface para o solver Branch & Bound.
-    - `history_page.py`: Página de histórico.
-    - `plots.py` e `tableau_display.py`: Auxiliares para visualização.
-
-## Objetivo
-
-Este projeto tem como objetivo principal servir como uma ferramenta didática, permitindo que usuários não apenas obtenham respostas para seus problemas de otimização, mas também compreendam o processo de resolução através de visualizações claras e detalhadas.
+Construído com **Python** e **Streamlit**, o sistema oferece visualizações ricas (gráficos 2D/3D, árvores de decisão, tableaux passo a passo) para tornar conceitos matemáticos abstratos em experiências tangíveis.
 
 ---
-*Desenvolvido para fins educacionais - v0.3 (Outubro 2025)*
+
+## 🚀 Funcionalidades Principais
+
+### 📐 Simplex
+- **Resolução Passo a Passo:** Acompanhe cada iteração do algoritmo Simplex.
+- **Visualização 3D/2D:** Gráficos interativos da região factível com identificação de vértices e caminho da solução.
+- **Tableau Interativo:** Exibição detalhada das variáveis básicas, não.básicas e operações de pivoteamento.
+- **Identificação de Casos:** Detecta soluções ótimas, múltiplas soluções, problemas ilimitados e inviáveis.
+
+### 🌐 Internacionalização (Multi-Idioma)
+O projeto suporta múltiplos idiomas via arquivos JSON.
+- **Idiomas Suportados:** Português (pt), Inglês (en), Espanhol (es).
+- **Contribuição:** Para adicionar um novo idioma, basta criar um arquivo `.json` em `ui/locales/` (ex: `fr.json`) espelhando a estrutura de `en.json` e submeter um Pull Request. O sistema detectará automaticamente.
+
+### 🌳 Branch & Bound
+- **Programação Inteira:** Algoritmo completo para resolver PLI.
+- **Árvore de Decisão Visual:** Grafo interativo gerado em tempo real mostrando nós, podas (bound, integridade, inviabilidade) e ramificações.
+- **Estratégias de Busca:** Suporte a BFS, DFS e Best-Bound.
+
+### 🛠️ Ferramentas de Análise
+- **🔄 Conversor Primal-Dual:** Transforme problemas instantaneamente e resolva o Dual.
+- **📊 Análise de Sensibilidade:** Calcule preços sombra (Shadow Prices) e intervalos de estabilidade para coeficientes da função objetivo ($c_j$) e restrições ($b_i$).
+- **📝 Forma Padrão:** Conversor automático para a forma canônica (Maximização, Igualdades, RHS $\ge$ 0) com passo a passo didático.
+
+### 📚 Recursos Adicionais
+- **Biblioteca de Problemas:** Acervo com problemas clássicos (Dieta, Mochila, Mix de Produção) prontos para teste.
+- **Histórico de Sessão:** Seus problemas resolvidos ficam salvos automaticamente para comparação e revisão.
+
+---
+
+## 🛠️ Tecnologias
+
+- **Frontend:** [Streamlit](https://streamlit.io/)
+- **Cálculo Numérico:** [NumPy](https://numpy.org/) e [Pandas](https://pandas.pydata.org/)
+- **Visualização:** [Plotly](https://plotly.com/) (Gráficos) e [St-Link-Analysis](https://github.com/Altxator/st-link-analysis) (Grafos/Árvores)
+
+---
+
+## ⚡ Como Executar
+
+### Pré-requisitos
+- Python 3.8+
+
+### Passo a Passo
+
+1. **Clone o repositório**
+   ```bash
+   git clone <url-do-repositorio>
+   cd solver_pl
+   ```
+
+2. **Crie um ambiente virtual**
+   ```bash
+   # MacOS/Linux
+   python3 -m venv .venv
+   source .venv/bin/activate
+   
+   # Windows
+   python -m venv .venv
+   .venv\Scripts\activate
+   ```
+
+3. **Instale as dependências**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Execute a aplicação**
+   ```bash
+   streamlit run app.py
+   ```
+
+---
+
+## 📂 Estrutura do Projeto
+
+```
+solver_pl/
+├── app.py                  # Entrypoint principal (Navegação)
+├── core/                   # Lógica matemática (Solvers)
+│   ├── simplex_solver.py       # Simplex Primal
+│   ├── branch_bound_solver.py  # Branch & Bound
+├── ui/                     # Interface do Usuário (Páginas)
+│   ├── home_page.py            # Dashboard Principal
+│   ├── simplex_page.py         # UI Simplex
+│   ├── branch_and_bound_page.py# UI Branch & Bound
+│   ├── sensitivity_page.py     # Análise de Sensibilidade
+│   ├── Standard_form_page.py   # Conversor Forma Padrão
+│   ├── duality_page.py         # Conversor Dual
+│   ├── library_page.py         # Biblioteca de Problemas
+│   └── plots.py                # Geração de Gráficos 2D/3D
+```
+
+---
+
+*Desenvolvido com ❤️ para fins educacionais - v0.5 (Janeiro 2026)*
