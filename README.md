@@ -45,7 +45,7 @@ The project supports multiple languages via JSON files.
 
 - **Frontend:** [Streamlit](https://streamlit.io/)
 - **Numerical Calculation:** [NumPy](https://numpy.org/) and [Pandas](https://pandas.pydata.org/)
-- **Visualization:** [Plotly](https://plotly.com/) (Charts) and [St-Link-Analysis](https://github.com/Altxator/st-link-analysis) (Graphs/Trees)
+- **Visualization:** [Plotly](https://plotly.com/) (Charts) and [St-Link-Analysis](https://github.com/AlrasheedA/st-link-analysis) (Graphs/Trees)
 
 ---
 
