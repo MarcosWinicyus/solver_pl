@@ -36,8 +36,8 @@ The project supports multiple languages via JSON files.
 - **Session History:** Your solved problems are automatically saved for comparison and review.
 
 ### 📖 Detailed Documentation
-- [Features Documentation](FEATURES.md) - Detailed breakdown of functional and non-functional requirements.
-- [Architecture Documentation](ARCHITECTURE.md) - Technical decisions, structure, and diagrams (C4 Model).
+- [Features Documentation](docs/FEATURES.md) - Detailed breakdown of functional and non-functional requirements.
+- [Architecture Documentation](docs/ARCHITECTURE.md) - Technical decisions, structure, and diagrams (C4 Model).
 
 ---
 
