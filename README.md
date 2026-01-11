@@ -1,64 +1,68 @@
-# Sistema de Otimização Visual 📊
+# Visual Optimization System 📊
 
-## Sobre o Projeto
+## About the Project
 
-O **Sistema de Otimização Visual** (Solver PL) é uma plataforma interativa e didática desenvolvida para auxiliar no ensino e aprendizagem de Pesquisa Operacional. Ele foca na resolução e visualização de problemas de **Programação Linear (PL)** e **Programação Inteira (PLI)**.
+The **Visual Optimization System** (Solver LP) is an interactive and didactic platform developed to assist in teaching and learning Operations Research. It focuses on the resolution and visualization of **Linear Programming (LP)** and **Integer Programming (IP)** problems.
 
-Construído com **Python** e **Streamlit**, o sistema oferece visualizações ricas (gráficos 2D/3D, árvores de decisão, tableaux passo a passo) para tornar conceitos matemáticos abstratos em experiências tangíveis.
+Built with **Python** and **Streamlit**, the system offers rich visualizations (2D/3D charts, decision trees, step-by-step tableaux) to turn abstract mathematical concepts into tangible experiences.
 
 ---
 
-## 🚀 Funcionalidades Principais
+## 🚀 Key Features
 
 ### 📐 Simplex
-- **Resolução Passo a Passo:** Acompanhe cada iteração do algoritmo Simplex.
-- **Visualização 3D/2D:** Gráficos interativos da região factível com identificação de vértices e caminho da solução.
-- **Tableau Interativo:** Exibição detalhada das variáveis básicas, não.básicas e operações de pivoteamento.
-- **Identificação de Casos:** Detecta soluções ótimas, múltiplas soluções, problemas ilimitados e inviáveis.
+- **Step-by-Step Resolution:** Follow each iteration of the Simplex algorithm.
+- **3D/2D Visualization:** Interactive charts of the feasible region identifying vertices and the solution path.
+- **Interactive Tableau:** Detailed display of basic and non-basic variables and pivoting operations.
+- **Case Identification:** Detects optimal solutions, multiple solutions, unbounded problems, and infeasible cases.
 
-### 🌐 Internacionalização (Multi-Idioma)
-O projeto suporta múltiplos idiomas via arquivos JSON.
-- **Idiomas Suportados:** Português (pt), Inglês (en), Espanhol (es).
-- **Contribuição:** Para adicionar um novo idioma, basta criar um arquivo `.json` em `ui/locales/` (ex: `fr.json`) espelhando a estrutura de `en.json` e submeter um Pull Request. O sistema detectará automaticamente.
+### 🌐 Internationalization (Multi-Language)
+The project supports multiple languages via JSON files.
+- **Supported Languages:** Portuguese (pt), English (en), Spanish (es).
+- **Contribution:** To add a new language, simply create a `.json` file in `ui/locales/` (e.g., `fr.json`) mirroring the structure of `en.json` and submit a Pull Request. The system will automatically detect it.
 
 ### 🌳 Branch & Bound
-- **Programação Inteira:** Algoritmo completo para resolver PLI.
-- **Árvore de Decisão Visual:** Grafo interativo gerado em tempo real mostrando nós, podas (bound, integridade, inviabilidade) e ramificações.
-- **Estratégias de Busca:** Suporte a BFS, DFS e Best-Bound.
+- **Integer Programming:** Complete algorithm for solving IP problems.
+- **Visual Decision Tree:** Real-time interactive graph showing nodes, prunings (bound, integrality, infeasibility), and branches.
+- **Search Strategies:** Support for BFS, DFS, and Best-Bound.
 
-### 🛠️ Ferramentas de Análise
-- **🔄 Conversor Primal-Dual:** Transforme problemas instantaneamente e resolva o Dual.
-- **📊 Análise de Sensibilidade:** Calcule preços sombra (Shadow Prices) e intervalos de estabilidade para coeficientes da função objetivo ($c_j$) e restrições ($b_i$).
-- **📝 Forma Padrão:** Conversor automático para a forma canônica (Maximização, Igualdades, RHS $\ge$ 0) com passo a passo didático.
+### 🛠️ Analysis Tools
+- **🔄 Primal-Dual Converter:** Instantly transform problems and solve the Dual.
+- **📊 Sensitivity Analysis:** Calculate Shadow Prices and stability intervals for objective function coefficients ($c_j$) and constraints ($b_i$).
+- **📝 Standard Form:** Automatic converter to canonical form (Maximization, Equalities, RHS $\ge$ 0) with didactic step-by-step explanation.
 
-### 📚 Recursos Adicionais
-- **Biblioteca de Problemas:** Acervo com problemas clássicos (Dieta, Mochila, Mix de Produção) prontos para teste.
-- **Histórico de Sessão:** Seus problemas resolvidos ficam salvos automaticamente para comparação e revisão.
+### 📚 Additional Resources
+- **Problem Library:** Collection of classic problems (Diet, Knapsack, Production Mix) ready for testing.
+- **Session History:** Your solved problems are automatically saved for comparison and review.
+
+### 📖 Detailed Documentation
+- [Features Documentation](FEATURES.md) - Detailed breakdown of functional and non-functional requirements.
+- [Architecture Documentation](ARCHITECTURE.md) - Technical decisions, structure, and diagrams (C4 Model).
 
 ---
 
-## 🛠️ Tecnologias
+## 🛠️ Technologies
 
 - **Frontend:** [Streamlit](https://streamlit.io/)
-- **Cálculo Numérico:** [NumPy](https://numpy.org/) e [Pandas](https://pandas.pydata.org/)
-- **Visualização:** [Plotly](https://plotly.com/) (Gráficos) e [St-Link-Analysis](https://github.com/Altxator/st-link-analysis) (Grafos/Árvores)
+- **Numerical Calculation:** [NumPy](https://numpy.org/) and [Pandas](https://pandas.pydata.org/)
+- **Visualization:** [Plotly](https://plotly.com/) (Charts) and [St-Link-Analysis](https://github.com/Altxator/st-link-analysis) (Graphs/Trees)
 
 ---
 
-## ⚡ Como Executar
+## ⚡ How to Run
 
-### Pré-requisitos
+### Prerequisites
 - Python 3.8+
 
-### Passo a Passo
+### Step-by-Step
 
-1. **Clone o repositório**
+1. **Clone the repository**
    ```bash
-   git clone <url-do-repositorio>
+   git clone <repository-url>
    cd solver_pl
    ```
 
-2. **Crie um ambiente virtual**
+2. **Create a virtual environment**
    ```bash
    # MacOS/Linux
    python3 -m venv .venv
@@ -69,37 +73,37 @@ O projeto suporta múltiplos idiomas via arquivos JSON.
    .venv\Scripts\activate
    ```
 
-3. **Instale as dependências**
+3. **Install dependencies**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Execute a aplicação**
+4. **Run the application**
    ```bash
    streamlit run app.py
    ```
 
 ---
 
-## 📂 Estrutura do Projeto
+## 📂 Project Structure
 
 ```
 solver_pl/
-├── app.py                  # Entrypoint principal (Navegação)
-├── core/                   # Lógica matemática (Solvers)
-│   ├── simplex_solver.py       # Simplex Primal
+├── app.py                  # Main Entrypoint (Navigation)
+├── core/                   # Mathematical Logic (Solvers)
+│   ├── simplex_solver.py       # Primal Simplex
 │   ├── branch_bound_solver.py  # Branch & Bound
-├── ui/                     # Interface do Usuário (Páginas)
-│   ├── home_page.py            # Dashboard Principal
-│   ├── simplex_page.py         # UI Simplex
-│   ├── branch_and_bound_page.py# UI Branch & Bound
-│   ├── sensitivity_page.py     # Análise de Sensibilidade
-│   ├── Standard_form_page.py   # Conversor Forma Padrão
-│   ├── duality_page.py         # Conversor Dual
-│   ├── library_page.py         # Biblioteca de Problemas
-│   └── plots.py                # Geração de Gráficos 2D/3D
+├── ui/                     # User Interface (Pages)
+│   ├── home_page.py            # Main Dashboard
+│   ├── simplex_page.py         # Simplex UI
+│   ├── branch_and_bound_page.py# Branch & Bound UI
+│   ├── sensitivity_page.py     # Sensitivity Analysis
+│   ├── Standard_form_page.py   # Standard Form Converter
+│   ├── duality_page.py         # Dual Converter
+│   ├── library_page.py         # Problem Library
+│   └── plots.py                # 2D/3D Chart Generation
 ```
 
 ---
 
-*Desenvolvido com ❤️ para fins educacionais - v0.5 (Janeiro 2026)*
+*Developed with ❤️ for educational purposes - v0.5 (January 2026)*

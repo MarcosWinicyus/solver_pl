@@ -34,7 +34,7 @@
         "status": "**Status:** {0}"
     },
     "home": {
-        "title": "PL Solver",
+        "title": "Solver LP",
         "subtitle": "Didactic Platform for Linear and Integer Optimization",
         "simplex_title": "📐 Simplex",
         "simplex_desc": "Step-by-step resolution with interactive <b>3D/2D visualization</b>, tableau analysis, and multiple iterations.",

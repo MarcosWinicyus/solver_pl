@@ -17,18 +17,22 @@ def duality_ui():
 
     # --- Configuração do Primal ---
     st.subheader(t("duality.primal_def"))
+
+    # Carregar estado ou usar defaults
+    saved = st.session_state.get("problem", {})
+    sv_c, sv_A, sv_b = saved.get("c", []), saved.get("A", []), saved.get("b", [])
     
     col_counts = st.columns(3)
     with col_counts[0]:
-        n_vars = st.number_input(t("simplex.n_vars"), 2, 10, 2, help=t("simplex.vars_help"))
+        n_vars = st.number_input(t("simplex.n_vars"), 2, 10, max(len(sv_c), 2), help=t("simplex.vars_help"))
     with col_counts[1]:
-        n_constr = st.number_input(t("simplex.n_cons"), 1, 10, 2, help=t("simplex.cons_help"))
+        n_constr = st.number_input(t("simplex.n_cons"), 1, 10, max(len(sv_A), 2), help=t("simplex.cons_help"))
     
     with col_counts[2]:
         maximize = st.selectbox(
             t("simplex.obj_type"),
             (t("simplex.maximize"), t("simplex.minimize")),
-            index=0,
+            index=0 if saved.get("maximize", True) else 1,
             help=t("simplex.obj_help")
         )
     is_max = (maximize == t("simplex.maximize"))
@@ -38,7 +42,8 @@ def duality_ui():
     c = []
     for i in range(n_vars):
         with cols_c[i]:
-            val = st.number_input(f"**x{i+1}**", value=1.0, key=f"p_c_{i}")
+            val_def = sv_c[i] if i < len(sv_c) else 1.0
+            val = st.number_input(f"**x{i+1}**", value=val_def, key=f"p_c_{i}")
             c.append(val)
 
     st.markdown(f"#### {t('simplex.constraints')}")
@@ -52,7 +57,8 @@ def duality_ui():
         row = []
         for j in range(n_vars):
             with cols[j]:
-                val = st.number_input(f"**x{j+1}**", value=1.0, key=f"p_a_{r}_{j}", help=f"{t('simplex.coef_help')} x{j+1}")
+                val_def = sv_A[r][j] if r < len(sv_A) and j < len(sv_A[r]) else 1.0
+                val = st.number_input(f"**x{j+1}**", value=val_def, key=f"p_a_{r}_{j}", help=f"{t('simplex.coef_help')} x{j+1}")
                 row.append(val)
         
         with cols[n_vars]:
@@ -60,7 +66,8 @@ def duality_ui():
             senses.append(sense)
             
         with cols[n_vars+1]:
-            val_b = st.number_input(t("simplex.rhs_label"), value=10.0, key=f"p_b_{r}")
+            val_b_def = sv_b[r] if r < len(sv_b) else 10.0
+            val_b = st.number_input(t("simplex.rhs_label"), value=val_b_def, key=f"p_b_{r}")
             b.append(val_b)
         A.append(row)
 
